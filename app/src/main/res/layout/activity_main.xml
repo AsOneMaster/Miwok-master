@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/stra_t"
+    android:orientation="vertical"
+    tools:context="com.example.android.learnmiwok.acticity.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <Button
+            android:id="@+id/numbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/bg_bulue"
+            android:text="普通用户模式"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/family"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/numbers"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/bg_bulue"
+            android:text="管理人员用户模式"
+            android:textColor="#FFFFFF" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/family"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/colors"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/family"
+                android:background="@mipmap/qq"
+                android:layout_marginLeft="100dp"/>
+
+            <ImageButton
+                android:id="@+id/phrases"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/family"
+                android:layout_marginLeft="30dp"
+                android:background="@mipmap/wechat" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

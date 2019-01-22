@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+   >
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="fragment.app_safety_Fragment"
+            android:id="@+id/fragment"
+            android:layout_above="@+id/tab_group"
+            tools:layout="@layout/fragment_app_square" >
+
+        </fragment>
+
+
+    <ImageView
+        android:id="@+id/menu_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/mine"/>
+        <RadioGroup
+            android:id="@+id/tab_group"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:layout_alignParentBottom="true"
+            android:background="#FFFFFF"
+            android:orientation="horizontal">
+
+            <RadioButton
+                style="@style/button_TabStyle"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:id="@+id/image_safety"
+                android:drawableTop="@drawable/safe_button_down"
+                android:checked="true" />
+            <RadioButton
+                style="@style/button_TabStyle"
+                android:id="@+id/image_square"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:drawableTop="@drawable/square_button_down" />
+            <RadioButton
+                style="@style/button_TabStyle"
+                android:id="@+id/image_mine"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:drawableTop="@drawable/mine_button_down" />
+        </RadioGroup>
+
+
+</RelativeLayout>

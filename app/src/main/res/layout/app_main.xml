@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="acticity.App_Activity">
+    <acticity.Menu_Activity
+        android:id="@+id/menu_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        //导入侧滑菜单布局
+        <include layout="@layout/activity_menu_"/>
+        <include layout="@layout/activity_app_"/>
+    </acticity.Menu_Activity>
+</RelativeLayout>
