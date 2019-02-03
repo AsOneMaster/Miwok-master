@@ -20,15 +20,22 @@
         android:layout_height="40dp">
         <TextView
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="安全"
-            android:textSize="20dp"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:background="#FFFFFF"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="安全"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:background="#FFFFFF"/>
     </LinearLayout>
-
+<TextView
+    android:id="@+id/textView_message"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/textView_s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 
