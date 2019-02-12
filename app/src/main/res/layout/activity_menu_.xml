@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="com.example.android.learnmiwok.acticity.Menu_Activity">
+    tools:context="acticity.Menu_Activity">
     <!--标题部分-->
 
     <LinearLayout

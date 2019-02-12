@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
-
+/**
+ * 侧滑菜单--还未实现！！！未应用
+ */
 public class Menu_Activity extends FrameLayout {
     private View menuView,appView;
     private  int menuWidth;

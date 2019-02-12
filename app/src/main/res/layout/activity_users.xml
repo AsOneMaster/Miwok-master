@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:stretchColumns="0,3"
     android:background="@mipmap/enter_nor"
-    tools:context="com.example.android.learnmiwok.acticity.UsersActivity">
+    tools:context="acticity.UsersActivity">
 
 
 

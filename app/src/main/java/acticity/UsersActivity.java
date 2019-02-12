@@ -31,7 +31,7 @@ public class UsersActivity extends AppCompatActivity implements View.OnClickList
         });
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), App_Activity.class);
                 if (intent != null) {
                     startActivity(intent);

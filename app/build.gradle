@@ -9,10 +9,10 @@ android {
             storePassword 'android'
         }
     }
-    sourceSets{
-        main{
-            jni.srcDirs=[]
-            jniLibs.srcDirs=['src/main/JNIlibs']
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['src/main/JNIlibs']
         }
     }
     compileSdkVersion 26

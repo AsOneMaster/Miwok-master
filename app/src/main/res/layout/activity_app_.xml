@@ -18,11 +18,11 @@
         </fragment>
 
 
-    <ImageView
-        android:id="@+id/menu_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/mine"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/menu_back"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@mipmap/mine"/>-->
         <RadioGroup
             android:id="@+id/tab_group"
             android:layout_width="match_parent"

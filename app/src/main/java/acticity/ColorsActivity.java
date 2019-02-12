@@ -6,6 +6,9 @@ import android.view.Window;
 
 import com.example.android.learnmiwok.R;
 
+/**
+ * 空白页面 目前只做跳转页面使用
+ */
 public class ColorsActivity extends AppCompatActivity {
 
     @Override
