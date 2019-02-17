@@ -2,15 +2,10 @@ package acticity;
 
 import android.support.v4.app.Fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 
 import android.os.Bundle;
-import android.view.View;
 
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import com.example.android.learnmiwok.R;
@@ -87,8 +82,7 @@ public class App_Activity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_main);
-
+        setContentView(R.layout.activity_app_main);
         fragments.add(new app_safety_Fragment());
         fragments.add(new app_squareFragment());
         fragments.add(new app_mineFragment());

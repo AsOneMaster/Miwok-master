@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.design.widget.TabLayout;
 
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ public class app_squareFragment extends Fragment {
     private View view;
     private TabLayout my_table;
     private ViewPager viewPager;
+
     //放进集合
     private List<String> tas=new ArrayList<>();
     @Nullable

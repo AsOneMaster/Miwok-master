@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+    android:theme="@style/AppTheme.NoActionBar"
    >
-
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="fragment.app_safety_Fragment"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <FrameLayout
             android:id="@+id/fragment"
-            android:layout_above="@+id/tab_group"
-            tools:layout="@layout/fragment_app_square" >
-
-        </fragment>
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:background="#77557799"
+            />
 
 
     <!--<ImageView-->
@@ -52,5 +53,5 @@
                 android:drawableTop="@drawable/mine_button_down" />
         </RadioGroup>
 
-
+    </LinearLayout>
 </RelativeLayout>

@@ -12,7 +12,6 @@ import com.example.android.learnmiwok.R;
 
 
 public class app_mineFragment extends Fragment {
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
