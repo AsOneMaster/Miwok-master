@@ -1,8 +1,6 @@
 package fragment;
 
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -32,7 +30,7 @@ public class app_squareFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_app_square, container, false);
+        view = inflater.inflate(R.layout.fragment_app_square, container, false);
         initView(view);
         return view;
     }
@@ -58,6 +56,7 @@ public class app_squareFragment extends Fragment {
         //得到页面的title,会添加到tabLayout控件上
         @Override
         public CharSequence getPageTitle(int position) {
+
             return tas.get(position);
         }
         @Override
@@ -74,9 +73,11 @@ public class app_squareFragment extends Fragment {
                 //view的页数
         @Override
         public int getCount() {
+
             return tas.size();
         }
         public MyAdapter(FragmentManager fm) {
+
             super(fm);
         }
     }

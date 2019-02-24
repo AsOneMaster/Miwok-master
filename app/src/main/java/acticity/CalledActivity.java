@@ -11,23 +11,45 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.example.android.learnmiwok.R;
 
 /**
- * 空白页面 目前只做跳转页面使用
+ * 伪装来电-实现响铃与震动
  */
 public class CalledActivity extends AppCompatActivity {
     private ImageButton call_over;
+    private ImageButton call_on;
+    private ImageButton call_over_S;
     private static MediaPlayer mMediaPlayer;
     private static Vibrator vibrator;
+    private RelativeLayout r_o,r_c;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_safe_called);
+        r_o=(RelativeLayout)findViewById(R.id.callddd);
+        r_c=(RelativeLayout)findViewById(R.id.calling);
+
         call_over=(ImageButton)findViewById(R.id.call_over);
+        call_on=(ImageButton)findViewById(R.id.call_on);
+        call_over_S=(ImageButton)findViewById(R.id.call_over_S);
         call_over.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        call_on.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StopRingTone();
+                r_o.setVisibility(View.INVISIBLE);
+            }
+        });
+        call_over_S.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
