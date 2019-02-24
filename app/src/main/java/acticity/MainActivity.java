@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         colors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ColorsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CalledActivity.class);
                 if (intent != null) {
                     startActivity(intent);
                 }            }
@@ -54,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
         phrases.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PhrasesActivity.class);
-                if (intent != null) {
-                    startActivity(intent);
-                }            }
+//                Intent intent = new Intent(getApplicationContext(), MyMessageActivity.class);
+//                if (intent != null) {
+//                    startActivity(intent);
+//                }
+            }
         });
 
     }
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void openNumbers(View view) {
-            Log.i("MainActiviy","in openNumbers");
+            Log.d("MainActiviy","in openNumbers");
             Intent intent = new Intent(this, UsersActivity.class);
             if (intent != null) {
                 startActivity(intent);
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
        }
 
         public void openColors(View view) {
-            Intent intent = new Intent(this, ColorsActivity.class);
+            Intent intent = new Intent(this, CalledActivity.class);
             if (intent != null) {
                 startActivity(intent);
             }
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
        public void openPhrases(View view) {
-             Intent intent = new Intent(this, PhrasesActivity.class);
+             Intent intent = new Intent(this, MyMessageActivity.class);
             if (intent != null) {
                 startActivity(intent);
             }

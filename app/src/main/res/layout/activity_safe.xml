@@ -1,27 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   >
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 
     <include layout="@layout/fragment_app_safety" />
 
-    <android.support.design.widget.FloatingActionButton
+    <LinearLayout
+        android:id="@+id/share_loc"
         android:layout_width="100dp"
-        android:layout_gravity="center|bottom"
-        android:id="@+id/fab"
-        app:elevation="6dp"
-        android:clickable="true"
-        app:borderWidth="0dp"
-        android:backgroundTint="@color/white"
-        app:rippleColor="#0097a7"
+        android:layout_height="30dp"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/help"
-        app:pressedTranslationZ="12dp"
-        android:layout_height="100dp" />
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:background="@color/white"
+            android:src="@mipmap/shareloc" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="位置分享" />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="22dp"
+        android:background="@mipmap/r_white_bg"
+        app:elevation="6dp" />
+    <ImageButton
+        android:id="@+id/fab"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center|bottom"
+
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/help"
+        app:elevation="6dp" />
+    <LinearLayout
+        android:id="@+id/be_called"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:layout_marginLeft="5dp"
+            android:background="@color/white"
+            android:src="@mipmap/be_called" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="伪装来电" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

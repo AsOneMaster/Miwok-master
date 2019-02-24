@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LearnMiwok</string>
+    <string name="app_name">Care you</string>
 
     <!-- Category name for phrases [CHAR LIMIT=20] -->
     <string name="category_phrases">Phrases</string>

@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="acticity.App_Activity">
+    <!-- 定义滚动条
+     sytle滚动条样式：progressBarStyleLarge一个大圆形样式
+  -->
+
     <acticity.Menu_Activity
         android:id="@+id/menu_activity"
         android:layout_width="match_parent"
