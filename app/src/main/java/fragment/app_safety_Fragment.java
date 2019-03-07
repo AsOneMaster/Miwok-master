@@ -171,6 +171,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     public void initMapView(View view){
         mMapView =(MapView) view.findViewById(R.id.map_view);
         mBaiduMap = mMapView.getMap();
+        //隐藏缩放按钮
+        mMapView.showZoomControls(false);
         // 删除百度地图LoGo
         mMapView.removeViewAt(1);
         // 初始化搜索模块，注册事件监听
@@ -188,7 +190,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//设置定位模式：高精度，低功耗，仅设备
         option.setOpenGps(true);// 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(0);//设置每秒更新一次位置信息
+        //option.setScanSpan(0);//设置每秒更新一次位置信息
         option.disableCache(false);// 禁止启用缓存定位
         option.setIsNeedLocationDescribe(true);//设置需要位置描述信息
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
@@ -198,7 +200,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         option.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
-        //option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
+        option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         mLocClient.setLocOption(option);
         mLocClient.start();
     }
@@ -328,7 +330,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private void sinnerStart(){
         spinner= (Spinner)view.findViewById(R.id.test_spinner);
 //        初始化spinner中显示的数据
-        mArrayString = new String[]{"出行记录","我的求救","我的线索","我的取证"};
+        mArrayString = new String[]{"我的位置","我的求救","我的线索","我的取证"};
 //        adapter_mytopactionbar_spinner改变了spinner的默认样式
         mArrayAdapter=new ArrayAdapter<String>(getActivity().getApplicationContext(),R.layout.adapter_mytopactionbar_spinner,mArrayString){
             @Override
@@ -359,7 +361,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     //处理事件的代码
                     switch (position){
                         case 0:
-                            Toast.makeText(getActivity(),"出行记录",Toast.LENGTH_SHORT).show();
+
                             break;
                         case 1:
                             Toast.makeText(getActivity(),"我的求救",Toast.LENGTH_SHORT).show();
@@ -380,45 +382,45 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             }
         });
 //        第二次点击相同
-        spinner.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
-            BDLocation location;
-            @Override
-            public void onChildViewAdded(View parent, View child) {
-            }
-
-            @Override
-            public void onChildViewRemoved(View parent, View child) {
-
-                try {
-                    Class<?> clazz = AdapterView.class;
-                    Field mOldSelectedPosition = clazz.getDeclaredField("mOldSelectedPosition");
-                    Field mSelectedPosition = clazz.getDeclaredField("mSelectedPosition");
-                    mOldSelectedPosition.setAccessible(true);
-                    mSelectedPosition.setAccessible(true);
-                    if (mOldSelectedPosition.getInt(spinner) == mSelectedPosition.getInt(spinner)) {
-                        //响应事件
-                        switch (mSelectedPosition.getInt(spinner)){
-                            case 0:
-                                Toast.makeText(getActivity(),"出行记录",Toast.LENGTH_SHORT).show();
-                                break;
-                            case 1:
-                                Toast.makeText(getActivity(),"我的求救",Toast.LENGTH_SHORT).show();
-                                break;
-                            case 2:
-                                Toast.makeText(getActivity(),"我的线索",Toast.LENGTH_SHORT).show();
-                                break;
-                            case 3:
-                                Toast.makeText(getActivity(),"我的取证",Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        });
+//        spinner.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+//            BDLocation location;
+//            @Override
+//            public void onChildViewAdded(View parent, View child) {
+//            }
+//
+//            @Override
+//            public void onChildViewRemoved(View parent, View child) {
+//
+//                try {
+//                    Class<?> clazz = AdapterView.class;
+//                    Field mOldSelectedPosition = clazz.getDeclaredField("mOldSelectedPosition");
+//                    Field mSelectedPosition = clazz.getDeclaredField("mSelectedPosition");
+//                    mOldSelectedPosition.setAccessible(true);
+//                    mSelectedPosition.setAccessible(true);
+//                    if (mOldSelectedPosition.getInt(spinner) == mSelectedPosition.getInt(spinner)) {
+//                        //响应事件
+//                        switch (mSelectedPosition.getInt(spinner)){
+//                            case 0:
+//                                Toast.makeText(getActivity(),"出行记录",Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case 1:
+//                                Toast.makeText(getActivity(),"我的求救",Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case 2:
+//                                Toast.makeText(getActivity(),"我的线索",Toast.LENGTH_SHORT).show();
+//                                break;
+//                            case 3:
+//                                Toast.makeText(getActivity(),"我的取证",Toast.LENGTH_SHORT).show();
+//                                break;
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//        });
     }
 
 

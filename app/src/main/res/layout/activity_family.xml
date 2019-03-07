@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:stretchColumns="0,3"
     android:background="@mipmap/enter_sys"
-    tools:context="com.example.android.learnmiwok.acticity.FamilyActivity"><![CDATA[
+    tools:context="acticity.FamilyActivity"><![CDATA[
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -73,7 +73,7 @@
                             android:id="@+id/loginS"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/bg_bulue"
+                            android:background="@drawable/app_bulue_clickable"
                             android:text="注册"
                             android:textColor="#FFFFFF"/>
                         <Button
@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:text="登录"
                             android:textColor="#FFFFFF"
-                            android:background="@drawable/bg_bulue"/>
+                            android:background="@drawable/app_bulue_clickable"/>
                 </TableRow>
                 <TableRow>
                         <TextView />

@@ -66,6 +66,8 @@ public class TopTwoFragment extends Fragment {
                 button.setVisibility(View.GONE);
             }
         });
+        showView.loadUrl("http://m.woniu8.com/ceshi/");
+        button.setVisibility(View.GONE);
         return view;
     }
 

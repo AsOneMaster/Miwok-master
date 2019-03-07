@@ -62,7 +62,7 @@
             android:id="@+id/loginN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_bulue"
+            android:background="@drawable/app_bulue_clickable"
             android:text="注册"
             android:textColor="#FFFFFF"/>
         <Button
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:text="登录"
             android:textColor="#FFFFFF"
-            android:background="@drawable/bg_bulue"/>
+            android:background="@drawable/app_bulue_clickable"/>
     </TableRow>
     <TableRow>
         <TextView />

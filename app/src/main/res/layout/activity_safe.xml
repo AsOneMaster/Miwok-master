@@ -14,8 +14,9 @@
         android:layout_height="30dp"
         android:layout_gravity="left|bottom"
         android:layout_marginLeft="20dp"
+        android:clickable="true"
         android:layout_marginBottom="20dp"
-        android:background="@color/white"
+        android:background="@drawable/app_white_clickable"
         android:orientation="horizontal">
 
         <ImageButton
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:src="@mipmap/shareloc" />
 
         <TextView
@@ -52,10 +53,11 @@
         android:id="@+id/be_called"
         android:layout_width="100dp"
         android:layout_height="30dp"
+        android:clickable="true"
         android:layout_gravity="right|bottom"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/white"
+        android:background="@drawable/app_white_clickable"
         android:orientation="horizontal">
 
         <ImageButton
@@ -65,7 +67,7 @@
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:layout_marginLeft="5dp"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:src="@mipmap/be_called" />
 
         <TextView

@@ -8,8 +8,13 @@ import android.support.v4.app.FragmentActivity;
 
 import android.os.Bundle;
 
-import android.view.View;import android.widget.ProgressBar;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 
 import com.example.android.learnmiwok.R;
@@ -33,13 +38,17 @@ public class App_Activity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //去掉Activity上面的状态栏
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_app_);
         fragments.add(new app_safety_Fragment());
         fragments.add(new app_squareFragment());
         fragments.add(new app_mineFragment());
         rgs = (RadioGroup) findViewById(R.id.tab_group);
-        FragmentTabAdapter tabAdapter = new FragmentTabAdapter(this, fragments,R.id.fragment, rgs);
-        tabAdapter.setOnRgsExtraCheckedChangedListener(new FragmentTabAdapter.OnRgsExtraCheckedChangedListener(){
+        FragmentTabAdapter tabAdapter = new FragmentTabAdapter(this, fragments, R.id.fragment, rgs);
+        tabAdapter.setOnRgsExtraCheckedChangedListener(new FragmentTabAdapter.OnRgsExtraCheckedChangedListener() {
             @Override
             public void OnRgsExtraCheckedChanged(RadioGroup radioGroup, int checkedId, int index) {
                 System.out.println("Extra---- " + index + " checked!!! ");
@@ -47,4 +56,32 @@ public class App_Activity extends FragmentActivity {
         });
 
     }
-}
+
+    /**
+     * 点击两次back退出程序
+     */
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(),
+                    "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        }
+        else{
+                finish();
+                System.exit(0);
+            }
+
+        }
+    }
+
