@@ -31,7 +31,7 @@ public class CalledActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_safe_called);
         r_o=(RelativeLayout)findViewById(R.id.callddd);
-        r_c=(RelativeLayout)findViewById(R.id.calling);
+        r_c=(RelativeLayout )findViewById(R.id.calling);
 
         call_over=(ImageButton)findViewById(R.id.call_over);
         call_on=(ImageButton)findViewById(R.id.call_on);

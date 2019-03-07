@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
     <include layout="@layout/fragment_app_safety" />
+
     <LinearLayout
         android:id="@+id/share_loc"
         android:layout_width="100dp"
@@ -29,19 +32,19 @@
             android:layout_gravity="center"
             android:text="位置分享" />
     </LinearLayout>
+
     <ImageView
         android:layout_width="95dp"
         android:layout_height="95dp"
         android:layout_gravity="center|bottom"
         android:layout_marginBottom="22dp"
-        android:background="@mipmap/r_white_bg"
+        android:src="@mipmap/r_white_bg"
         app:elevation="6dp" />
     <ImageButton
         android:id="@+id/fab"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center|bottom"
-
         android:layout_marginBottom="20dp"
         android:background="@drawable/help"
         app:elevation="6dp" />

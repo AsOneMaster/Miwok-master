@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), UsersActivity.class);
                 if (intent != null) {
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -39,16 +40,18 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), FamilyActivity.class);
                 if (intent != null) {
                     startActivity(intent);
+                    finish();
                 }            }
         });
         ImageButton colors = (ImageButton) findViewById(R.id.colors);
         colors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CalledActivity.class);
-                if (intent != null) {
-                    startActivity(intent);
-                }            }
+//                Intent intent = new Intent(getApplicationContext(), CalledActivity.class);
+//                if (intent != null) {
+//                    startActivity(intent);
+//                }
+            }
         });
         ImageButton phrases = (ImageButton) findViewById(R.id.phrases);
         phrases.setOnClickListener(new View.OnClickListener() {
@@ -63,53 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-       public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.numbers:
-                    openNumbers(view);
-                   break;
-                case R.id.colors:
-                    openColors(view);
-                    break;
-                case R.id.phrases:
-                    openPhrases(view);
-                    break;
-                case R.id.family:
-                    openFamily(view);
-                    break;
-                default:
-                   break;
-            }
-        }
 
-        public void openNumbers(View view) {
-            Log.d("MainActiviy","in openNumbers");
-            Intent intent = new Intent(this, UsersActivity.class);
-            if (intent != null) {
-                startActivity(intent);
-            }
-       }
-
-        public void openColors(View view) {
-            Intent intent = new Intent(this, CalledActivity.class);
-            if (intent != null) {
-                startActivity(intent);
-            }
-        }
-
-       public void openFamily(View view) {
-           Intent intent = new Intent(this, FamilyActivity.class);
-            if (intent != null) {
-                startActivity(intent);
-           }
-        }
-
-       public void openPhrases(View view) {
-             Intent intent = new Intent(this, MyMessageActivity.class);
-            if (intent != null) {
-                startActivity(intent);
-            }
-        }
 
     }

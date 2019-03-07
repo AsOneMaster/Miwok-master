@@ -5,9 +5,16 @@
     tools:context="fragment.TopTwoFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <WebView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/webview"/>
+
+    <Button
+        android:id="@+id/heart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bulue"
         android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

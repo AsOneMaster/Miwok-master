@@ -33,7 +33,7 @@ public class App_Activity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_main);
+        setContentView(R.layout.activity_app_);
         fragments.add(new app_safety_Fragment());
         fragments.add(new app_squareFragment());
         fragments.add(new app_mineFragment());

@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.example.android.learnmiwok.R;
 
-public class UsersActivity extends AppCompatActivity implements View.OnClickListener{
+public class UsersActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class UsersActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 if (intent != null) {
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -35,35 +36,36 @@ public class UsersActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(getApplicationContext(), App_Activity.class);
                 if (intent != null) {
                     startActivity(intent);
+                    finish();
                 }
             }
         });
 
     }
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.loginN:
-                openLogin(view);
-                break;
-            case R.id.enterN:
-                openEnter(view);
-
-            default:
-                break;
-        }
-    }
-
-    public void openLogin(View v) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        if (intent != null) {
-            startActivity(intent);
-        }
-    }
-    public void openEnter(View v) {
-        Intent intent = new Intent(this, App_Activity.class);
-        if (intent != null) {
-            startActivity(intent);
-        }
-    }
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.loginN:
+//                openLogin(view);
+//                break;
+//            case R.id.enterN:
+//                openEnter(view);
+//
+//            default:
+//                break;
+//        }
+//    }
+//
+//    public void openLogin(View v) {
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        if (intent != null) {
+//            startActivity(intent);
+//        }
+//    }
+//    public void openEnter(View v) {
+//        Intent intent = new Intent(this, App_Activity.class);
+//        if (intent != null) {
+//            startActivity(intent);
+//        }
+//    }
 
 }

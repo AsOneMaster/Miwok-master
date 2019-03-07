@@ -2,15 +2,10 @@ package fragment;
 
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
+
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
 import android.telephony.SmsManager;
@@ -22,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -42,7 +36,6 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 
-import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
@@ -300,7 +293,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     s_loc.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(getActivity(),uri+"!!!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"求助短信已发送",Toast.LENGTH_SHORT).show();
 
                             myListener.sendPhoneNumber("18181766092");
                         }
@@ -323,7 +316,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         //一键发送短信
         private void sendPhoneNumber(String phoneNumber){
             SmsManager smsManager=SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber,null,"您的学生处于危险中，在"+uri.toString()+"附近，请尽快前往",null,null);
+            smsManager.sendTextMessage(phoneNumber,null,"【\bCare\byou\b】您好，您的学生通过Care\byou向您发起了求助，最后地点在"+uri.toString(),null,null);
         }
     }
 

@@ -38,7 +38,7 @@ public class app_squareFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         tas.add("发现");
-        tas.add("关注");
+        tas.add("心理");
         //设置适配器  注意：getChildFragmentManager
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
         //建立关联
