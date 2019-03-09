@@ -31,6 +31,7 @@
             android:gravity="center_horizontal"
             />
         <EditText
+            android:id="@+id/user_name"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:hint="邮箱或手机号"
@@ -49,6 +50,7 @@
             android:gravity="center_horizontal"/>
 
         <EditText
+            android:id="@+id/pass_word"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入6-16位数字或字母"
@@ -67,6 +69,7 @@
             android:textColor="#FFFFFF"/>
         <Button
             android:id="@+id/enterN"
+            android:onClick="login_u"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="登录"

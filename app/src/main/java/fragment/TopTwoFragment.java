@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,6 +22,7 @@ public class TopTwoFragment extends Fragment {
     private Button button;
     private View view;
     private WebView showView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,24 +51,40 @@ public class TopTwoFragment extends Fragment {
         webSettings.setDisplayZoomControls(true);
         // 设置默认字体大小
         webSettings.setDefaultFontSize(12);
+
+
         showView.setWebViewClient(new WebViewClient() {
                                       public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
                                           view.loadUrl(url);
                                           return false;
-                                      }
-                                  });
-
-        button =(Button)view.findViewById(R.id.heart);
-        button.setOnClickListener(new View.OnClickListener() {
+                                      }});
+        showView.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
-//                Intent intent=new Intent(Intent.ACTION_VIEW);
-//                intent.setData(Uri.parse("http://m.woniu8.com"));
-//                startActivity(intent);
-                showView.loadUrl("http://m.woniu8.com/");
-                button.setVisibility(View.GONE);
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((keyCode == KeyEvent.KEYCODE_BACK) &&showView.canGoBack()){
+                  getActivity().runOnUiThread(new Runnable(){
+                      @Override
+                        public void run(){
+                            showView.goBack();
+                                }
+                            });
+                  return true;
+                }
+                return false;
             }
+
         });
+//        button =(Button)view.findViewById(R.id.heart);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent=new Intent(Intent.ACTION_VIEW);
+////                intent.setData(Uri.parse("http://m.woniu8.com"));
+////                startActivity(intent);
+//                showView.loadUrl("http://m.woniu8.com/");
+//                button.setVisibility(View.GONE);
+//            }
+//        });
         showView.loadUrl("http://m.woniu8.com/ceshi/");
         button.setVisibility(View.GONE);
         return view;

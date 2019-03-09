@@ -42,6 +42,7 @@ android {
     }
     productFlavors {
     }
+    allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" } }}
 }
 
 dependencies {
@@ -60,5 +61,7 @@ dependencies {
     implementation files('libs/BaiduLBS_Android.jar')
     implementation files('libs/IndoorscapeAlbumPlugin.jar')
     implementation files('libs/fastjson-1.2.9.jar')
-
+    implementation files('libs/httpclient-4.2.5.jar')
+    implementation files('libs/httpcore-4.4.4.jar')
+    implementation files('libs/android-async-http-1.4.7.jar')
 }
