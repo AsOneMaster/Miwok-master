@@ -33,9 +33,9 @@ public class UsersActivity extends AppCompatActivity {
     private EditText passWord;
     private Button login;
     private Button enter;
-    public static String pass;
-    public static String user;
-    private static String uri="http://192.168.42.33:8080/Te/login.d1";
+    public static String isSuccess;
+
+    private static String uri="http://192.168.42.33:8080/Te/login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        //解决主线程不能连接连接服务器
@@ -59,7 +59,8 @@ public class UsersActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -74,31 +75,7 @@ public class UsersActivity extends AppCompatActivity {
         RequestParams params=new RequestParams();
         params.put("userName",uname);
         params.put("passWord",upass);
-        httpClient.post(uri,params,new TextHttpResponseHandler(){
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-
-                Toast.makeText(UsersActivity.this,""+responseBody,Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onSuccess(int i, Header[] headers, String s) {
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                Intent intent = new Intent(getApplicationContext(), App_Activity.class);
-                if (intent != null) {
-
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-        });
-        httpClient.get(uri, new JsonHttpResponseHandler(){
+        httpClient.post(uri,params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 if(statusCode==200){
@@ -106,16 +83,23 @@ public class UsersActivity extends AppCompatActivity {
 
                     for(int i=0;i<response.length();i++){
                         try {
-                            user=response.getString("name");
-                            pass=response.getString("pass");
-                            Log.e("user",user);
-                            Log.e("pass",pass);
+                            isSuccess=response.getString("login");
+                            Log.e("pass",isSuccess);
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     }
-
+                    if ("success".equals(isSuccess)) {
+                        Toast.makeText(UsersActivity.this, "登录成功", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), App_Activity.class);
+                        if (intent != null) {
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(UsersActivity.this, "密码或账户错误", Toast.LENGTH_LONG).show();
+                    }
 
 
                 }

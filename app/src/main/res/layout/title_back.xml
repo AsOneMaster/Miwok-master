@@ -18,13 +18,13 @@
         
         android:id="@+id/img_back" />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:textColor="#525252"
-        android:textSize="20sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_margin="8dp"
+    android:gravity="center"
+    android:textColor="#525252"
+    android:textSize="20sp"
         android:id="@+id/atm" />
 
     <FrameLayout

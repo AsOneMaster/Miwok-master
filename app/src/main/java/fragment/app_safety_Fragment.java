@@ -4,6 +4,11 @@ package fragment;
 
 import android.content.Intent;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,11 +28,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -36,7 +43,10 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -49,20 +59,28 @@ import com.baidu.mapapi.search.share.OnGetShareUrlResultListener;
 import com.baidu.mapapi.search.share.ShareUrlResult;
 import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.example.android.learnmiwok.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
-import java.lang.reflect.Field;
+
 
 import acticity.CalledActivity;
 import acticity.MyMessageActivity;
+import bean.locationBean;
 
 public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResultListener {
     private static final String TAG="app_safety_Fragment";
+    private static final String path="http://192.168.42.33:8080/Te/location";
     private Spinner spinner;
     private static String[] mArrayString = null;
     private ArrayAdapter<String> mArrayAdapter;
+    //定位相关
+    private UiSettings mUiSettings;
     private MapView mMapView=null;//什么地图组件
     private BaiduMap mBaiduMap;
-//短串分享
+    BitmapDescriptor mCurrentMarker,othersCurrentMarker;
+    //短串分享
     private ShareUrlSearch mShareUrlSearch = null;
     private String uri;
     // 定位相关
@@ -78,6 +96,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private  View view;
     private LinearLayout s_loc,be_called;
     private ImageButton fab;
+    private  static JSONObject send_loc;
+    private static  locationBean locationBean=new locationBean();
     public MyLocationListener myListener = new MyLocationListener();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,7 +166,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callPhoneNumber("18181766092");
+                send_loc=JSONObject.parseObject(JSONObject.toJSONString(locationBean).toString());
+                RequestParams entity = null;
+                entity = new RequestParams();
+                entity.put("loc",send_loc.toString());
+                AsyncHttpClient httpClient=new AsyncHttpClient();
+                httpClient.post(path,entity, new JsonHttpResponseHandler(){});
+//                callPhoneNumber("18181766092");
             }
         });
         be_called.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +197,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     public void initMapView(View view){
         mMapView =(MapView) view.findViewById(R.id.map_view);
         mBaiduMap = mMapView.getMap();
+        //隐藏指南针
+        mUiSettings = mBaiduMap.getUiSettings();
+        mUiSettings.setCompassEnabled(true);
         //隐藏缩放按钮
         mMapView.showZoomControls(false);
         // 删除百度地图LoGo
@@ -203,7 +232,67 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         mLocClient.setLocOption(option);
         mLocClient.start();
+
+
+        //添加他人位置
+        Resources r = this.getResources();
+        Bitmap bmp= BitmapFactory.decodeResource(r, R.drawable.head_img);
+        addOthersLocation(28.810072 ,104.683334,bmp);
+
     }
+    /**
+     * 添加他人位置
+     */
+    public void addOthersLocation(double latitute,double longtitute, Bitmap touxiang) {
+
+        Resources r = this.getResources();
+        Bitmap bmp= BitmapFactory.decodeResource(r, R.drawable.dingwei);//标识红点
+
+        //构建Marker图标
+        othersCurrentMarker = BitmapDescriptorFactory
+                .fromBitmap(mergeBitmap(bmp,touxiang));
+
+        //定义Maker坐标点
+        LatLng point = new LatLng(latitute, longtitute);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(point)
+                .icon(othersCurrentMarker);
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
+    }
+    //将两张图片合并为一张图片 用作头像
+    private Bitmap mergeBitmap(Bitmap firstBitmap, Bitmap secondBitmap) {
+        int Width = firstBitmap.getWidth();
+        int height = firstBitmap.getHeight();
+        secondBitmap = zoomImage(secondBitmap,Width,height);
+        Bitmap bitmap = Bitmap.createBitmap(Width, height*2,
+                firstBitmap.getConfig());
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(secondBitmap, new Matrix(), null);
+        canvas.drawBitmap(firstBitmap, 0, height, null);
+        return bitmap;
+    }
+
+    //缩放头像图片
+    public  Bitmap zoomImage(Bitmap bgimage, double newWidth,
+                             double newHeight) {
+        // 获取这个图片的宽和高
+        float width = bgimage.getWidth();
+        float height = bgimage.getHeight();
+        // 创建操作图片用的matrix对象
+        Matrix matrix = new Matrix();
+        // 计算宽高缩放率
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap bitmap = Bitmap.createBitmap(bgimage, 0, 0, (int) width,
+                (int) height, matrix, true);
+        return bitmap;
+    }
+
+
     /**
      * 定位SDK监听函数
      */
@@ -226,15 +315,12 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 //          实时获取地址短串
             shardUrlGPS(latLng);
+//          获取本地位置信息
+            locationBean.setLatitude(location.getLatitude());
+            locationBean.setLongitude(location.getLongitude());
+            locationBean.setAddr(location.getAddrStr());
+            locationBean.setLocationDescribe(location.getLocationDescribe());
 
-
-            //COMPASS罗盘态LocationMode.NORMAL 普通态LocationMode.FOLLOWING;//定位跟随态
-//            MyLocationConfiguration.LocationMode mCurrentMode = MyLocationConfiguration.LocationMode.FOLLOWING;
-//            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
-//            BitmapDescriptor mCurrentMarker= BitmapDescriptorFactory.fromResource(R.drawable.dingwei);
-//            //设置
-//            MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker);
-//            mBaiduMap.setMyLocationConfiguration(config);
             if (isFirstLoc) {
                 // 设置地图中心点
                 MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
@@ -258,8 +344,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             sb.append(location.getLongitude());//获取经度
             sb.append("\nradius : ");
             sb.append(location.getRadius());//获取定位精度半径，单位是米
-            sb.append("\naddr : ");
-            sb.append(location.getAddrStr());
             if (location.getLocType() == BDLocation.TypeGpsLocation){//获取error code
                 sb.append("\nspeed : ");
                 sb.append(location.getSpeed());
@@ -268,6 +352,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation){
                 sb.append("\naddr : ");
                 sb.append(location.getAddrStr());
+                sb.append("\nlocationDescribe : ");
+                sb.append(location.getLocationDescribe());
             }
 
             textView_s.setText(sb.toString());

@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/myInfo_personal_info_layout"
+        android:id="@+id/contact_personal_info_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="55dp"
-            android:text="个人资料"
+            android:text="紧急联系人"
             android:textColor="#111111"
             android:textSize="15sp"/>
 

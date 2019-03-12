@@ -19,7 +19,7 @@ import com.example.android.learnmiwok.R;
 
 
 public class TopTwoFragment extends Fragment {
-    private Button button;
+
     private View view;
     private WebView showView;
 
@@ -86,7 +86,6 @@ public class TopTwoFragment extends Fragment {
 //            }
 //        });
         showView.loadUrl("http://m.woniu8.com/ceshi/");
-        button.setVisibility(View.GONE);
         return view;
     }
 
