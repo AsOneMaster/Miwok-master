@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.learnmiwok">
     //手机震动
-    <uses-permission android:name="android.permission." />
+    <uses-permission android:name="android.permission.VIBRATE" />
     //收发短信
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -15,7 +15,7 @@
     //网络权限，当禁用后，无法进行检索等相关业务
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     //读取设备硬件信息，统计数据
-    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     //读取系统信息，包含系统版本等信息，用作统计
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -43,6 +43,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:name="MyApp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -50,6 +51,14 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="BgAaYlKSeLMLNhFdTU6CcOYrM35kw3Si" />
 
+
+        <receiver android:name=".fragment.app_safety_Fragment$NotificationClickReceiver" >
+                        <intent-filter>
+                            <action android:name="com.example.android.learnmiwok" />
+                        </intent-filter>
+                    </receiver> 
+
+        <service android:name="com.example.android.learnmiwok.common.MinaService"></service>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -61,7 +70,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name="acticity.MainActivity">
+        <activity android:name=".acticity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -69,23 +78,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="acticity.MyMessageActivity"
+            android:name=".acticity.MyMessageActivity"
             android:label="@string/category_phrases" />
         <activity
-            android:name="acticity.UsersActivity"
+            android:name=".acticity.UsersActivity"
             android:label="@string/category_numbers" />
         <activity
-            android:name="acticity.FamilyActivity"
+            android:name=".acticity.FamilyActivity"
             android:label="@string/category_family" />
         <activity
-            android:name="acticity.CalledActivity"
+            android:name=".acticity.CalledActivity"
             android:label="@string/category_colors" />
         <activity
-            android:name="acticity.LoginActivity"
+            android:name=".acticity.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name="acticity.App_Activity" ></activity>
-        <activity android:name=".PersonSettingActivity" />
-        <activity android:name=".ContactSettingActivity"></activity>
+        <activity android:name=".acticity.App_Activity" ></activity>
+        <activity android:name=".acticity.PersonSettingActivity" />
+        <activity android:name=".acticity.ContactSettingActivity" />
+        <activity
+            android:name=".acticity.SosActivity"
+            android:label="@string/title_activity_sos"
+            android:theme="@style/NoActionBar"></activity>
     </application>
 
 </manifest>

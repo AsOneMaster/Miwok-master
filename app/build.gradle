@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
     signingConfigs {
         config {
             keyAlias 'androiddebugkey'
@@ -70,4 +77,8 @@ dependencies {
     implementation files('libs/httpclient-4.2.5.jar')
     implementation files('libs/httpcore-4.4.4.jar')
     implementation files('libs/android-async-http-1.4.7.jar')
+    implementation files('libs/mina-core-2.0.19.jar')
+    implementation files('libs/slf4j-api-1.8.0-beta4.jar')
+
+    implementation files('libs/slf4j-simple-1.8.0-beta4.jar')
 }

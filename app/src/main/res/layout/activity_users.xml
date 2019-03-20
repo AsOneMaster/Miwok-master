@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:stretchColumns="0,3"
     android:background="@mipmap/enter_nor"
-    tools:context="acticity.UsersActivity">
+    tools:context=".acticity.UsersActivity">
 
 
 
@@ -32,9 +32,12 @@
             />
         <EditText
             android:id="@+id/user_name"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:hint="邮箱或手机号"
+            android:digits="1234567890."
+            android:singleLine="true"
             android:textColorHint="#A9A9A9"/>
 
         <TextView />
@@ -51,9 +54,11 @@
 
         <EditText
             android:id="@+id/pass_word"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入6-16位数字或字母"
+            android:singleLine="true"
             android:inputType="textPassword"
             android:textColorHint="#A9A9A9"/>
         <TextView />

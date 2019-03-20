@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="acticity.CalledActivity">
+    tools:context=".acticity.CalledActivity">
     <include layout="@layout/title_back"/>
     <TextView
         android:layout_width="wrap_content"

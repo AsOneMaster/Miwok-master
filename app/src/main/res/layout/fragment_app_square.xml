@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="fragment.app_squareFragment">
+    tools:context=".fragment.app_squareFragment">
     <include layout="@layout/toolbar_squareinfo"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/tab"

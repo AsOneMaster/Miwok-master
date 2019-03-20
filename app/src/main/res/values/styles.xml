@@ -30,7 +30,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
-    
+
     <style name="button_TabStyle">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
@@ -39,6 +39,7 @@
         <item name="android:button">@null</item>
         <item name="android:drawablePadding">0dp</item>
     </style>
+
     <style name="menu_TabText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -48,20 +49,35 @@
         <item name="android:padding">15dp</item>
         <item name="android:textSize">22sp</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="AppTheme.NoActionBar.AppBarOverlay"
-        parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="AppTheme.Splash" parent="@android:style/Theme.NoDisplay"/>
+
+    <style name="AppTheme.Splash" parent="@android:style/Theme.NoDisplay" />
+
     <declare-styleable name="LoadingLayout">
         <attr name="loadingView" format="reference" />
         <attr name="stateView" format="reference" />
         <attr name="emptyView" format="reference" />
     </declare-styleable>
+
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

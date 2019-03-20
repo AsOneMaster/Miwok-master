@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@mipmap/stra_t"
     android:orientation="vertical"
-    tools:context="acticity.MainActivity">
+    tools:context=".acticity.MainActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

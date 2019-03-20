@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context="fragment.app_mineFragment">
+    tools:context=".fragment.app_mineFragment">
     <include layout="@layout/toolbar_myinfo"/>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
