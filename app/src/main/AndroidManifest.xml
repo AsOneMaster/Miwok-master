@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.learnmiwok">
+    //一直保持程序在唤醒的状态
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     //手机震动
     <uses-permission android:name="android.permission.VIBRATE" />
     //收发短信
@@ -31,7 +33,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
@@ -46,7 +47,7 @@
         android:name="MyApp"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="BgAaYlKSeLMLNhFdTU6CcOYrM35kw3Si" />
@@ -79,26 +80,34 @@
         </activity>
         <activity
             android:name=".acticity.MyMessageActivity"
-            android:label="@string/category_phrases" />
+            android:label="@string/category_phrases"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.UsersActivity"
-            android:label="@string/category_numbers" />
+            android:label="@string/category_numbers"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.FamilyActivity"
-            android:label="@string/category_family" />
+            android:label="@string/category_family"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.CalledActivity"
-            android:label="@string/category_colors" />
+            android:label="@string/category_colors"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".acticity.App_Activity" ></activity>
-        <activity android:name=".acticity.PersonSettingActivity" />
-        <activity android:name=".acticity.ContactSettingActivity" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
+        <activity android:name=".acticity.App_Activity"
+            android:theme="@style/AppTheme.TranslucentStatus"></activity>
+        <activity android:name=".acticity.PersonSettingActivity"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
+        <activity android:name=".acticity.ContactSettingActivity"
+            android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.SosActivity"
             android:label="@string/title_activity_sos"
-            android:theme="@style/NoActionBar"></activity>
+            android:theme="@style/AppTheme.TranslucentStatus"></activity>
     </application>
 
 </manifest>

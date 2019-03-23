@@ -2,11 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar_home_unlogin"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:elevation="1dp"
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
     android:background="@color/white"
     android:orientation="vertical">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,17 +18,9 @@
         android:gravity="center"
         android:text="广场"
         android:textColor="#525252"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:id="@+id/textView3" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:foreground="@drawable/header_shadow"
-        android:id="@+id/frameLayout"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <!-- YOUR STUFF HERE -->
-    </FrameLayout>
+    </RelativeLayout>
+
 
 </RelativeLayout>

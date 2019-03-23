@@ -2,11 +2,13 @@ package com.example.android.learnmiwok.acticity;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,10 +43,11 @@ public class UsersActivity extends AppCompatActivity {
 //                StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
 //        StrictMode.setVmPolicy(
 //                new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
-
-
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
+
+
+
         setContentView(R.layout.activity_users);
 //        setTitle("Numbers");
         userName=(EditText) findViewById(R.id.user_name);

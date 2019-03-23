@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar_home_unlogin"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="wrap_content"
     android:elevation="1dp"
     android:background="@color/white"
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp">
 
         <Spinner
             android:id="@+id/test_spinner"
@@ -25,7 +26,7 @@
             android:layout_margin="8dp"
             android:text="安全"
             android:textColor="#525252"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <ImageButton
             android:id="@+id/img_message"

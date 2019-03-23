@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/calleded"
-    android:id="@+id/calling"
-    android:theme="@style/AppTheme.NoActionBar">
+    android:id="@+id/calling">
     <ImageButton
         android:id="@+id/call_over_S"
         android:layout_width="50dp"

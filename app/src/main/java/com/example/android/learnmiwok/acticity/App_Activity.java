@@ -3,6 +3,9 @@ package com.example.android.learnmiwok.acticity;
 
 import android.annotation.SuppressLint;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentActivity;
@@ -40,20 +43,15 @@ import com.example.android.learnmiwok.fragment.app_squareFragment;
 
 public class App_Activity extends FragmentActivity {
     private FragmentManager manager;
-   // private FragmentTransaction transaction;
+    // private FragmentTransaction transaction;
     private String ip;
     private RadioGroup rgs;
     private List<Fragment> fragments = new ArrayList<Fragment>();
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //去掉Activity上面的状态栏
-        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
-                WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_app_);
         fragments.add(new app_safety_Fragment());
         fragments.add(new app_squareFragment());
@@ -68,10 +66,10 @@ public class App_Activity extends FragmentActivity {
             }
         });
         //获取ip地址
-       // getMyip();
+        // getMyip();
 
 
-}
+    }
     /**
      * 获取本地ip地址
      */
@@ -151,7 +149,6 @@ public class App_Activity extends FragmentActivity {
 //    }
 
 
-
     /**
      * 点击两次back退出程序
      */
@@ -171,14 +168,17 @@ public class App_Activity extends FragmentActivity {
             Toast.makeText(getApplicationContext(),
                     "再按一次退出程序", Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
-        }
-        else{
+        } else {
             //退出程序但不销毁===ROOT_Activity
-            moveTaskToBack(false);
-            }
-
+//            moveTaskToBack(false);
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
         }
-
-
     }
+}
+
+
+
 

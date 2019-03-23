@@ -20,8 +20,11 @@ import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
 
 public class ConnectionManager {
-    public static final String BROADCAST_ACTION="com.xxx.mina.common";
+    public static final String BROADCAST_ACTION="com.example.android.learnmiwok.common";
     public static final String MESSAGE = "message";
+    /** 心跳包内容 */
+    private static final String HEARTBEATREQUEST = "000";//预设请求内容
+    private static final String HEARTBEATRESPONSE = "111";//预设应答内容
     private ConnectionConfig config;
     private WeakReference<Context> context;
     private NioSocketConnector connection;
@@ -88,6 +91,9 @@ public class ConnectionManager {
                 Intent intent = new Intent(BROADCAST_ACTION);
                 intent.putExtra(MESSAGE, message.toString());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            }
+            if(message.equals(HEARTBEATREQUEST)){
+                session.write(HEARTBEATRESPONSE);
             }
         }
     }

@@ -16,9 +16,6 @@ public class ContactSettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
-                WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_contact_setting);
         title=(TextView)findViewById(R.id.atm);
         title.setText("紧急联系人");

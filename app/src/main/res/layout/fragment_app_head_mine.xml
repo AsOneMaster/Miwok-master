@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/white_gray"
     tools:context=".fragment.app_mineFragment">
     <include layout="@layout/toolbar_myinfo"/>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +14,6 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white30"
             android:orientation="vertical">
 
             <RelativeLayout

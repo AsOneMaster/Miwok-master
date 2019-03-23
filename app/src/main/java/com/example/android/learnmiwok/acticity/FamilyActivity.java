@@ -14,7 +14,7 @@ public class FamilyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去掉屏幕上的标题
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去掉屏幕上的标题
         setContentView(R.layout.activity_family);
 //        setTitle("Family");
         Button login= (Button) findViewById(R.id.loginS);

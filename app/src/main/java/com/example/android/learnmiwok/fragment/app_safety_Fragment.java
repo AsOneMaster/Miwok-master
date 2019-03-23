@@ -4,6 +4,7 @@ package com.example.android.learnmiwok.fragment;
 
 import android.annotation.SuppressLint;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -17,9 +18,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
@@ -42,6 +47,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
@@ -76,6 +82,7 @@ import com.baidu.mapapi.search.share.OnGetShareUrlResultListener;
 import com.baidu.mapapi.search.share.ShareUrlResult;
 import com.baidu.mapapi.search.share.ShareUrlSearch;
 import com.example.android.learnmiwok.R;
+import com.example.android.learnmiwok.TimingTextView;
 import com.example.android.learnmiwok.acticity.App_Activity;
 import com.example.android.learnmiwok.acticity.SosActivity;
 import com.example.android.learnmiwok.common.ConnectionManager;
@@ -93,11 +100,21 @@ import com.example.android.learnmiwok.acticity.MyMessageActivity;
 import com.example.android.learnmiwok.acticity.UsersActivity;
 import com.example.android.learnmiwok.bean.locationBean;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 
 public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResultListener,View.OnTouchListener {
+
+    /**广播通知,渠道ID*/
     final String CHANNEL_ID = "com.example.android.learnmiwok";
     final String CHANNEL_NAME = "friends_notify";
     public String msg;
+    int MaxTime;
     public static double la,lo;
     private static final String TAG="app_safety_Fragment";
     private static final String path="http://192.168.43.162:8080/Te/location";
@@ -107,7 +124,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private String UserID=UsersActivity.UserID,OtherID;
     private ArrayAdapter<String> mArrayAdapter;
     //定位相关
-    private Marker marker;
+    private static String firstSend=null;
     private UiSettings mUiSettings;
     private MapView mMapView=null;//什么地图组件
     private BaiduMap mBaiduMap;
@@ -116,25 +133,54 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private ShareUrlSearch mShareUrlSearch = null;
     private String uri;
     // 定位相关
+    Marker marker;
     LatLng latLng=null;
     LocationClient mLocClient;
     boolean isFirstLoc = true;// 是否首次定位
     LocationClientOption option = null;
     GeoCoder mSearch = null; // 搜索模块，也可去掉地图模块独立使用
     //控件
+    private TimingTextView timingTextView;
     private Animation animation;
     private TextView textView_message;
     private TextView textView_s;
     private ImageButton img_message;
     private  View view;
     private LinearLayout s_loc,be_called;
-    private ImageButton fab;
+    private Button SOS;
     private Button s,r;
-    private  static JSONObject send_loc;
     private AsyncHttpClient httpClient1=new AsyncHttpClient();
     private static  locationBean locationBean=new locationBean();
     public MyLocationListener myListener = new MyLocationListener();
     MessageBroadcastReceiver receiver = new MessageBroadcastReceiver();
+    private List<Marker> markers=new ArrayList<Marker>();
+    /**timer对象**/
+    Timer mTimer = null;
+
+    /**TimerTask对象**/
+    TimerTask mTimerTask = null;
+    Handler handler = new Handler(){
+        public void handleMessage(Message msg){
+            switch(msg.what){
+                case 0:
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("client", "yes");
+                    jsonObject.put("Userid", UserID);
+                    jsonObject.put("lo", latLng.longitude);
+                    jsonObject.put("la", latLng.latitude);
+                    jsonObject.put("firstSend",firstSend);
+                    firstSend="no";
+                    //mina框架传值
+                    SessionManager.getInstance().writeToServer(jsonObject.toString());
+                    break;
+                case 1:
+
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -142,7 +188,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         Log.e("onViewstart", "Starting Service...");
         Intent intent = new Intent(getActivity().getApplicationContext(),MinaService.class);
         getActivity().getApplicationContext().startService(intent);
+
     }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -152,15 +200,50 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         SDKInitializer.initialize(getActivity().getApplicationContext());
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_safe, container, false);
+
         initView(view);
         initMapView(view);
         sinnerStart();
-
+        //注册接受服务
         registerBroadcast();
 
         Log.d("onCreateView","CreateView");
         return view;
     }
+    public void StartTimer(){
+        if(mTimer == null){
+            mTimerTask = new TimerTask(){
+                @Override
+                public void run() {
+                    Message msg = new Message();
+                    msg.what = 0;
+                    handler.sendMessage(msg);
+
+                    if(timingTextView.getTime()==0){
+                        timingTextView.setTextColor(getResources().getColor(R.color.red));
+//                        myListener.sendPhoneNumber("18181766092");
+                    };
+
+                }
+
+            };
+            mTimer = new Timer();
+            mTimer.schedule(mTimerTask, 20,3000);
+        }
+    }
+    public void CloseTimer(){
+        if(mTimer !=null){
+            mTimer.cancel();
+            mTimer = null;
+        }
+        if(mTimerTask!= null){
+            mTimerTask = null;
+        }
+        timingTextView.setTextColor(getResources().getColor(R.color.black));
+        handler.sendEmptyMessage(1);
+    }
+
+
     @Override
     public void onResume() {
         mMapView.onResume();
@@ -195,9 +278,10 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     }
     //初始化控件
     public  void initView(View view){
+        timingTextView=(TimingTextView)view.findViewById(R.id.Count_down);
         s=(Button)view.findViewById(R.id.button1);
         r=(Button)view.findViewById(R.id.button2);
-        fab=(ImageButton)view.findViewById(R.id.fab);
+        SOS=(Button)view.findViewById(R.id.fab);
         textView_message = (TextView) view.findViewById(R.id.textView_message);
         textView_s=(TextView)view.findViewById(R.id.textView_s);
         s_loc=(LinearLayout)view.findViewById(R.id.share_loc);
@@ -216,7 +300,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 }
             }
         });
-        fab.setOnClickListener(new View.OnClickListener() {
+        SOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), SosActivity.class);
@@ -236,17 +320,19 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
             }
         });
+        //开启上传位置线程
         s.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadingLoc();
-                s.setVisibility(View.GONE);
-                r.setVisibility(View.VISIBLE);
+                //打开Dialog，选择出行时间
+                 SelecTimeDialog();
             }
         });
         r.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //关闭线程
+                CloseTimer();
                 JSONObject jsonObject=new JSONObject();
                 jsonObject.put("client","no");
                 jsonObject.put("Userid",UserID);
@@ -254,12 +340,15 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 SessionManager.getInstance().writeToServer(jsonObject.toString());
                 s.setVisibility(View.VISIBLE);
                 r.setVisibility(View.GONE);
+                timingTextView.stop();
+                timingTextView.setVisibility(View.GONE);
             }
         });
 
-        fab.setOnTouchListener(this);
+        SOS.setOnTouchListener(this);
         s.setOnTouchListener(this);
     }
+
 
     //一键拨号
     private void callPhoneNumber(String phoneNumber) {
@@ -316,23 +405,17 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
      */
     private void uploadingLoc(){
 
-        send_loc=JSONObject.parseObject(JSONObject.toJSONString(locationBean).toString());
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("client","yes");
-        jsonObject.put("Userid",UserID);
 
-        //mina框架传值
-        SessionManager.getInstance().writeToServer(jsonObject.toString());
-
-        RequestParams entity = null;
-        entity = new RequestParams();
-        entity.put("loc",send_loc.toString());
-        AsyncHttpClient httpClient=new AsyncHttpClient();
-
-        Log.e("userid",UserID);
-        httpClient.post(path,entity, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
+//        send_loc=JSONObject.parseObject(JSONObject.toJSONString(locationBean).toString());
+//        RequestParams entity = null;
+//        entity = new RequestParams();
+//        entity.put("loc",send_loc.toString());
+//        AsyncHttpClient httpClient=new AsyncHttpClient();
+//
+//        Log.e("userid",UserID);
+//        httpClient.post(path,entity, new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
 //                if(statusCode==200){
 //                    for(int i=0;i<response.length();i++){
 //                        try {
@@ -345,8 +428,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 //                    }
 //
 //                        }
-                }
-            });
+//                }
+//            });
 
     }
 
@@ -381,7 +464,17 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 .position(point)
                 .icon(othersCurrentMarker);
         //在地图上添加Marker，并显示
-        marker=(Marker) mBaiduMap.addOverlay(option);
+        try {
+            if (markers.size()!=0){
+               markers.clear();
+               marker.remove();
+            }
+            marker=(Marker) mBaiduMap.addOverlay(option);
+            markers.add(marker);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         //显示在中心
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
                 .newMapStatus(new MapStatus.Builder().target(new LatLng(latitute,longtitute))
@@ -476,14 +569,19 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
 
             if (isFirstLoc) {
-                // 设置地图中心点
-                MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
-                        .newMapStatus(new MapStatus.Builder().target(latLng)
-                                .overlook(-15).rotate(360).zoom(17).build());
-                mBaiduMap.setMapStatus(mapStatusUpdate);
-                MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
-                mBaiduMap.animateMapStatus(u);
-                isFirstLoc = false;
+
+                if(latLng!=null) {
+                    // 设置地图中心点
+                    MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
+                            .newMapStatus(new MapStatus.Builder().target(latLng)
+                                    .overlook(-15).rotate(360).zoom(17).build());
+                    mBaiduMap.setMapStatus(mapStatusUpdate);
+                    MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+                    mBaiduMap.animateMapStatus(u);
+                    isFirstLoc = false;
+
+                }
+
 
             }
 
@@ -600,7 +698,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 } else {
                     //处理事件的代码
                     switch (position){
-                        case 0:
+                        case 0:   //显示在中心
+                            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
+                                    .newMapStatus(new MapStatus.Builder().target(latLng)
+                                            .overlook(-15).rotate(360).zoom(12).build());
+                            mBaiduMap.setMapStatus(mapStatusUpdate);
+                            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+                            mBaiduMap.animateMapStatus(u);
 
                             break;
                         case 1:
@@ -645,7 +749,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
 
     /**
-     * receive message and update ui
+     * receive message and update Marker on baiduMap
      */
     private class MessageBroadcastReceiver extends BroadcastReceiver {
 
@@ -656,9 +760,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
                 JSONObject object=JSONObject.parseObject(msg);
                 //接受通知
-                notifing(object.getString("situation"));
+                if(object.getString("firstSend").equals("yes")){
+                    notifing(object.getString("situation"));
+                }
+
                 if (object.getString("safe").equals("yes")) {
-                    marker.remove();
+                   marker.remove();
+                    notifing(object.getString("situation"));
                 }
                 if(object.getString("safe").equals("no")){
                     la = object.getDouble("la");
@@ -670,10 +778,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     Log.e("loo",lo+"");
                 }
 
-
-
             }
             else {
+                if(msg.equals("好友未上线"))
                 Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
             }
 
@@ -714,7 +821,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
             PendingIntent contentIntent = PendingIntent.getBroadcast(getActivity(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("好友守护")
+                    .setTicker("好友守护")
+                    .setContentTitle("请与好友保持联系")
                     .setContentText(notif)
                     .setAutoCancel(true).setContentIntent(contentIntent);
 
@@ -725,6 +833,53 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         }
 
     }
+    private void SelecTimeDialog(){
+
+        AlertDialog dialog=new AlertDialog.Builder(getActivity()).create();
+        dialog.show();
+        dialog.setContentView(R.layout.time_dialog);
+
+        MaxTime=0;
+
+        ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setIs24HourView(true);
+        ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setHour(0);
+        ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setMinute(0);
+        ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setOnTimeChangedListener(new TimePicker.OnTimeChangedListener(){
+
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute)
+            {
+
+                MaxTime=hourOfDay*3600+minute*60;
+            }
+        });
+        dialog.getWindow().findViewById(R.id.quit).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+
+                dialog.dismiss();
+            }});
+        dialog.getWindow().findViewById(R.id.select).setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                //开启线程
+                StartTimer();
+                timingTextView.setMaxTime(MaxTime);
+                timingTextView.setVisibility(View.VISIBLE);
+                timingTextView.start();
+                firstSend="yes";
+                s.setVisibility(View.GONE);
+                r.setVisibility(View.VISIBLE);
+                dialog.dismiss();
+            }});
+    }
+
+
+
+
+
 
     /**
      * 实时接受通知
@@ -735,7 +890,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             //todo 跳转之前要处理的逻辑
             //启动应用
             Log.e("TAG", "userClick:我被点击啦！！！ ");
-            Intent newIntent = new Intent(context, App_Activity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Intent newIntent = new Intent(context, App_Activity.class).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);//SINGLE_TOP 单例活动不创建新Activity
             context.startActivity(newIntent);
 
 

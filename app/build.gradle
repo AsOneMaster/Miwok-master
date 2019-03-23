@@ -81,4 +81,5 @@ dependencies {
     implementation files('libs/slf4j-api-1.8.0-beta4.jar')
 
     implementation files('libs/slf4j-simple-1.8.0-beta4.jar')
+    implementation 'com.github.andyxialm:ColorDialog:1.0.0'
 }

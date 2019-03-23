@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+
 public class MinaService extends Service {
+
     private ConnectionThread thread;
     @Override
     public void onCreate() {
@@ -16,6 +19,11 @@ public class MinaService extends Service {
         thread = new ConnectionThread("mina", getApplicationContext());
         thread.start();
         Log.e("tag", "start thread to connect");
+
+//        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+//        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+//                "myapp::mayserve");
+
     }
 
     @Override
@@ -41,6 +49,7 @@ public class MinaService extends Service {
 
         public ConnectionThread(String name, Context context) {
             super(name);
+
             ConnectionConfig config = new ConnectionConfig.Builder(context)
                     .setIp("192.168.43.162").setPort(9898)
                     .setReadBufferSize(10240).setConnectionTimeout(10000)
@@ -51,8 +60,10 @@ public class MinaService extends Service {
         @Override
         protected void onLooperPrepared() {
             while(true) {
+
                 isConnected = manager.connect();
                 if (isConnected){
+//                    wakeLock.acquire();
                     Log.e("tag", "connect successfully.");
                     break;
                 }

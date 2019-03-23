@@ -8,7 +8,7 @@
         </shape>
     </item>
     <item
-        android:bottom="2dp"
+        android:bottom="0dp"
         android:left="0dp"
         android:right="0dp"
         android:top="0dp"><!-- 距底部2dp，漏出上面那个item，使其可以显现出阴影 -->

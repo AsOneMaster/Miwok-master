@@ -4,7 +4,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e2e4fe"><!-- 此处需设置listView背景 -->
+
+    android:background="@color/white_gray"><!-- 此处需设置listView背景 -->
     <ListView
         android:id="@+id/card_listView"
         android:layout_width="match_parent"
