@@ -1,72 +1,111 @@
 package com.example.android.learnmiwok.bean;
 
+import java.sql.Date;
 
-public class locationBean {
-    private String userId;                //本机用户名
-    private String otherId;               //监控的用户名
-    private double latitude ;             //经度
-    private double longitude ;            //纬度
+public class LocationBean {
+    private int userId;                //本机用户名
+    private int otherId;               //监控的用户名
+    private Date event_date;
+    public Date getEvent_date() {
+		return event_date;
+	}
+	public void setEvent_date(Date event_date) {
+		this.event_date = event_date;
+	}
+
+	private String radius ;                //精度
     private String addr;                   //地址
     private String locationDescribe;      //位置描述
-    private String speed;
+    private String date;
+    private String end_addr;                   //地址
+    private String end_locationDescribe;      //位置描述
+    private String end_date;
+    public String getEnd_addr() {
+		return end_addr;
+	}
+	public void setEnd_addr(String end_addr) {
+		this.end_addr = end_addr;
+	}
+	public String getEnd_locationDescribe() {
+		return end_locationDescribe;
+	}
+	public void setEnd_locationDescribe(String end_locationDescribe) {
+		this.end_locationDescribe = end_locationDescribe;
+	}
+	public String getEnd_date() {
+		return end_date;
+	}
+	public void setEnd_date(String end_date) {
+		this.end_date = end_date;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	private String speed;
     private String height;
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    private String date;
-
-    public locationBean(){
+    public LocationBean(){
 
     }
-    public locationBean(String userId, String otherId, double latitude, double longitude, String addr, String locationDescribe,String date) {
-        this.userId = userId;
-        this.otherId=otherId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-;       this.date=date;
+    public LocationBean(int userId,String addr, String locationDescribe,String date,String end_addr,String end_locationDescribe,String end_date) {
+        this.userId = userId;     
+        this.event_date=event_date;      
         this.addr = addr;
         this.locationDescribe = locationDescribe;
+        this.date=date;
+        this.end_addr=end_addr;
+        this.end_locationDescribe=end_locationDescribe;
+        this.end_date=end_date;
     }
+    public LocationBean(int userId,Date event_date,String addr, String locationDescribe,String date) {
+        this.userId = userId;
+        this.event_date=event_date;
+        this.addr = addr;
+        this.locationDescribe = locationDescribe;
+        this.date=date;
 
-    public String getOtherId() {
+    }
+    public LocationBean(int userId, String end_addr, String end_locationDescribe,String end_date) {
+        this.userId = userId;
+        this.end_addr = addr;
+        this.end_locationDescribe =end_locationDescribe;
+        this.end_date=end_date;
+
+    }
+    public LocationBean(int userId) {
+        this.userId = userId;
+
+    }
+    public int getOtherId() {
         return otherId;
     }
 
-    public void setOtherId(String otherId) {
+    public void setOtherId(int otherId) {
         this.otherId = otherId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public double getLatitude() {
-        return latitude;
+
+    
+
+    public String  getRadius() {
+        return radius;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setRadius(String  radius) {
+        this.radius = radius;
     }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-
 
     public String getAddr() {
         return addr;

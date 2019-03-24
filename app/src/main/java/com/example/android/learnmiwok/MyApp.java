@@ -4,9 +4,32 @@ import android.app.Application;
 
 public class MyApp extends Application {
     private String userip;
+    private String msg;
     private Double latitude;
     private Double longitude;
     private String name;
+    //单例模式
+    private static MyApp singleInstance;
+
+    public static MyApp getInstance() {
+        return singleInstance;
+
+    }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        singleInstance = this;
+    }
+
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
     private String otherip;
 
     public String getName() {

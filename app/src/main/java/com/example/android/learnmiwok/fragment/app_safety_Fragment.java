@@ -5,6 +5,7 @@ package com.example.android.learnmiwok.fragment;
 import android.annotation.SuppressLint;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,6 +27,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.NotificationCompat;
@@ -81,10 +84,13 @@ import com.baidu.mapapi.search.share.LocationShareURLOption;
 import com.baidu.mapapi.search.share.OnGetShareUrlResultListener;
 import com.baidu.mapapi.search.share.ShareUrlResult;
 import com.baidu.mapapi.search.share.ShareUrlSearch;
+import com.example.android.learnmiwok.MyApp;
 import com.example.android.learnmiwok.R;
 import com.example.android.learnmiwok.TimingTextView;
 import com.example.android.learnmiwok.acticity.App_Activity;
 import com.example.android.learnmiwok.acticity.SosActivity;
+
+import com.example.android.learnmiwok.bean.LocationBean;
 import com.example.android.learnmiwok.common.ConnectionManager;
 import com.example.android.learnmiwok.common.MinaService;
 import com.example.android.learnmiwok.common.SessionManager;
@@ -94,11 +100,12 @@ import com.loopj.android.http.RequestParams;
 
 
 import org.apache.http.Header;
+import org.json.JSONException;
 
 import com.example.android.learnmiwok.acticity.CalledActivity;
 import com.example.android.learnmiwok.acticity.MyMessageActivity;
 import com.example.android.learnmiwok.acticity.UsersActivity;
-import com.example.android.learnmiwok.bean.locationBean;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,6 +121,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     final String CHANNEL_ID = "com.example.android.learnmiwok";
     final String CHANNEL_NAME = "friends_notify";
     public String msg;
+    public static String b_msg;
     int MaxTime;
     public static double la,lo;
     private static final String TAG="app_safety_Fragment";
@@ -124,6 +132,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private String UserID=UsersActivity.UserID,OtherID;
     private ArrayAdapter<String> mArrayAdapter;
     //定位相关
+    private  static JSONObject send_loc;
     private static String firstSend=null;
     private UiSettings mUiSettings;
     private MapView mMapView=null;//什么地图组件
@@ -149,8 +158,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private LinearLayout s_loc,be_called;
     private Button SOS;
     private Button s,r;
-    private AsyncHttpClient httpClient1=new AsyncHttpClient();
-    private static  locationBean locationBean=new locationBean();
+    private LocationBean locationBean=new LocationBean();
+    private  LocationBean locationBean_e=new LocationBean();
+
     public MyLocationListener myListener = new MyLocationListener();
     MessageBroadcastReceiver receiver = new MessageBroadcastReceiver();
     private List<Marker> markers=new ArrayList<Marker>();
@@ -220,6 +230,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     handler.sendMessage(msg);
 
                     if(timingTextView.getTime()==0){
+                        /**
+                         * 如何没有及时到达目的地，自动启动报警
+                         */
                         timingTextView.setTextColor(getResources().getColor(R.color.red));
 //                        myListener.sendPhoneNumber("18181766092");
                     };
@@ -278,6 +291,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     }
     //初始化控件
     public  void initView(View view){
+
         timingTextView=(TimingTextView)view.findViewById(R.id.Count_down);
         s=(Button)view.findViewById(R.id.button1);
         r=(Button)view.findViewById(R.id.button2);
@@ -336,6 +350,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 JSONObject jsonObject=new JSONObject();
                 jsonObject.put("client","no");
                 jsonObject.put("Userid",UserID);
+                uploadingLoc("no",locationBean_e);
                 //mina框架传值
                 SessionManager.getInstance().writeToServer(jsonObject.toString());
                 s.setVisibility(View.VISIBLE);
@@ -382,7 +397,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//设置定位模式：高精度，低功耗，仅设备
         option.setOpenGps(true);// 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
-        //option.setScanSpan(0);//设置每秒更新一次位置信息
+        option.setScanSpan(1000);//设置每秒更新一次位置信息
         option.disableCache(false);// 禁止启用缓存定位
         option.setIsNeedLocationDescribe(true);//设置需要位置描述信息
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
@@ -392,7 +407,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         option.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
-        option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
+        //option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         mLocClient.setLocOption(option);
         mLocClient.start();
 
@@ -403,33 +418,32 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     /**
      * 上传本地位置给服务器
      */
-    private void uploadingLoc(){
+    private void uploadingLoc(String isStart,LocationBean locationBean){
+        send_loc=JSONObject.parseObject(JSONObject.toJSONString(locationBean));
+        RequestParams entity = null;
+        entity = new RequestParams();
+        entity.put("loc",send_loc.toString());
+        entity.put("isStart",isStart);
+        AsyncHttpClient httpClient=new AsyncHttpClient();
+        Log.e("userid",UserID);
+        httpClient.post(path,entity, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
+                if(statusCode==200){
+                    for(int i=0;i<response.length();i++){
+                        try {
+                            if(isStart.equals("no"))
+                                b_msg=response.getString("show");
+                                MyApp.getInstance().setMsg(b_msg);
+                        } catch (JSONException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
 
-
-//        send_loc=JSONObject.parseObject(JSONObject.toJSONString(locationBean).toString());
-//        RequestParams entity = null;
-//        entity = new RequestParams();
-//        entity.put("loc",send_loc.toString());
-//        AsyncHttpClient httpClient=new AsyncHttpClient();
-//
-//        Log.e("userid",UserID);
-//        httpClient.post(path,entity, new JsonHttpResponseHandler(){
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-//                if(statusCode==200){
-//                    for(int i=0;i<response.length();i++){
-//                        try {
-//                            UserID=response.getString("userid");
-//
-//                        } catch (JSONException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                        }
-//                }
-//            });
+                        }
+              }
+           });
 
     }
 
@@ -561,12 +575,14 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             shardUrlGPS(latLng);
 //          获取本地位置信息
             locationBean.setDate(location.getTime());
-            locationBean.setUserId(UserID);
-            locationBean.setLatitude(location.getLatitude());
-            locationBean.setLongitude(location.getLongitude());
+            locationBean.setUserId(Integer.parseInt(UserID));
             locationBean.setAddr(location.getAddrStr());
             locationBean.setLocationDescribe(location.getLocationDescribe());
 
+            locationBean_e.setUserId(Integer.parseInt(UserID));
+            locationBean_e.setEnd_date(location.getTime());
+            locationBean_e.setEnd_addr(location.getAddrStr());
+            locationBean_e.setEnd_locationDescribe(location.getLocationDescribe());
 
             if (isFirstLoc) {
 
@@ -708,7 +724,33 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
                             break;
                         case 1:
-                            Toast.makeText(getActivity(),"我的求救",Toast.LENGTH_SHORT).show();
+
+                            RequestParams entity = null;
+                            entity = new RequestParams();
+                            entity.put("isStart","con");
+                            entity.put("userid",MyApp.getInstance().getUserip());
+                            AsyncHttpClient httpClient=new AsyncHttpClient();
+                            httpClient.post(path,entity, new JsonHttpResponseHandler(){
+                                @Override
+                                public  void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
+                                    if(statusCode==200){
+                                        for(int i=0;i<response.length();i++){
+                                            try {
+                                                b_msg=response.getString("show");
+                                                Log.e("ssss",b_msg);
+                                                MyApp.getInstance().setMsg(b_msg) ;
+                                            } catch (JSONException e) {
+                                                // TODO Auto-generated catch block
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
+                                        bottomSheetDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+                                    }
+                                }
+                            });
+
+
                             break;
                         case 2:
                             Toast.makeText(getActivity(),"我的线索",Toast.LENGTH_SHORT).show();
@@ -866,10 +908,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             public void onClick(View v) {
                 //开启线程
                 StartTimer();
+
                 timingTextView.setMaxTime(MaxTime);
                 timingTextView.setVisibility(View.VISIBLE);
                 timingTextView.start();
                 firstSend="yes";
+                uploadingLoc("yes",locationBean);
+                locationBean_e.setDate(locationBean.getDate());
                 s.setVisibility(View.GONE);
                 r.setVisibility(View.VISIBLE);
                 dialog.dismiss();

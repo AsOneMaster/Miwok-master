@@ -88,8 +88,7 @@ public class UsersActivity extends AppCompatActivity {
                             isSuccess=response.getString("login");
                             UserID=response.getString("userid");
                             if(UserID!=null){
-                                MyApp myApp=(MyApp)getApplication();
-                                myApp.setUserip(UserID);
+                               MyApp.getInstance().setUserip(UserID);
                             }
 
 
