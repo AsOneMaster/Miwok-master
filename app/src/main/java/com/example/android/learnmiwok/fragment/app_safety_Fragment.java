@@ -107,6 +107,7 @@ import com.example.android.learnmiwok.acticity.MyMessageActivity;
 import com.example.android.learnmiwok.acticity.UsersActivity;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -429,19 +430,19 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         httpClient.post(path,entity, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-                if(statusCode==200){
-                    for(int i=0;i<response.length();i++){
-                        try {
-                            if(isStart.equals("no"))
-                                b_msg=response.getString("show");
-                                MyApp.getInstance().setMsg(b_msg);
-                        } catch (JSONException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    }
-
-                        }
+//                if(statusCode==200){
+//                    for(int i=0;i<response.length();i++){
+//                        try {
+//                            if(isStart.equals("no"))
+//                                b_msg=response.getString("show");
+//                                MyApp.getInstance().setMsg(b_msg);
+//                        } catch (JSONException e) {
+//                            // TODO Auto-generated catch block
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                        }
               }
            });
 
@@ -580,7 +581,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             locationBean.setLocationDescribe(location.getLocationDescribe());
 
             locationBean_e.setUserId(Integer.parseInt(UserID));
-            locationBean_e.setEnd_date(location.getTime());
             locationBean_e.setEnd_addr(location.getAddrStr());
             locationBean_e.setEnd_locationDescribe(location.getLocationDescribe());
 
@@ -684,7 +684,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private void sinnerStart(){
         spinner= (Spinner)view.findViewById(R.id.test_spinner);
 //        初始化spinner中显示的数据
-        mArrayString = new String[]{"我的位置","我的求救","我的线索","我的取证"};
+        mArrayString = new String[]{"我的位置","出行记录","我的线索","我的取证"};
 //        adapter_mytopactionbar_spinner改变了spinner的默认样式
         mArrayAdapter=new ArrayAdapter<String>(getActivity().getApplicationContext(),R.layout.adapter_mytopactionbar_spinner,mArrayString){
             @Override
@@ -715,16 +715,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     //处理事件的代码
                     switch (position){
                         case 0:   //显示在中心
-                            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
-                                    .newMapStatus(new MapStatus.Builder().target(latLng)
-                                            .overlook(-15).rotate(360).zoom(12).build());
-                            mBaiduMap.setMapStatus(mapStatusUpdate);
-                            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
-                            mBaiduMap.animateMapStatus(u);
-
+                            showMylocation();
                             break;
                         case 1:
-
                             RequestParams entity = null;
                             entity = new RequestParams();
                             entity.put("isStart","con");
@@ -768,10 +761,58 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
             }
         });
+        //第二次点击相同
+        spinner.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+            BDLocation location;
+            @Override
+            public void onChildViewAdded(View parent, View child) {
+            }
+
+            @Override
+            public void onChildViewRemoved(View parent, View child) {
+
+                try {
+                    Class<?> clazz = AdapterView.class;
+                    Field mOldSelectedPosition = clazz.getDeclaredField("mOldSelectedPosition");
+                    Field mSelectedPosition = clazz.getDeclaredField("mSelectedPosition");
+                    mOldSelectedPosition.setAccessible(true);
+                    mSelectedPosition.setAccessible(true);
+                    if (mOldSelectedPosition.getInt(spinner) == mSelectedPosition.getInt(spinner)) {
+                        //响应事件
+                        switch (mSelectedPosition.getInt(spinner)){
+                            case 0:
+                                showMylocation();
+                                break;
+                            case 1:
+                                BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
+                                bottomSheetDialog.show(getActivity().getSupportFragmentManager(),"dialog");
+                                break;
+                            case 2:
+                                Toast.makeText(getActivity(),"我的线索",Toast.LENGTH_SHORT).show();
+                                break;
+                            case 3:
+                                Toast.makeText(getActivity(),"我的取证",Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
     }
 
 
-
+    private void showMylocation(){
+        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
+                .newMapStatus(new MapStatus.Builder().target(latLng)
+                        .overlook(-15).rotate(360).zoom(12).build());
+        mBaiduMap.setMapStatus(mapStatusUpdate);
+        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
+        mBaiduMap.animateMapStatus(u);
+    }
     @Override
     public void onGetGeoCodeResult(GeoCodeResult result) {
 

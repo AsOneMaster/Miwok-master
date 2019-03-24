@@ -167,7 +167,7 @@ public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
             this.s_t.setText("出发时间："+data.getDate().toString());
             this.e_t.setText("到达时间："+data.getEnd_date().toString());
             this.s_loc.setText("出发地点："+(data.getAddr()+data.getLocationDescribe()));
-            this.e_loc.setText("到达地点"+(data.getEnd_addr()+data.getEnd_locationDescribe()));
+            this.e_loc.setText("到达地点:"+(data.getEnd_addr()+data.getEnd_locationDescribe()));
         }
         @Override
         protected View initView() {

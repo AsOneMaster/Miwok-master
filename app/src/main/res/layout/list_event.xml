@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="2dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:elevation="3dp"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
     android:descendantFocusability="beforeDescendants"><!-- 为突出卡片效果，需设置左右padding,上下通过listView的divider设置 -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,53 +16,95 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:paddingLeft="15dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="@drawable/card_background_selector"
             android:descendantFocusability="afterDescendants"><!-- 给每个item增加background -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:elevation="1dp"
+                android:paddingBottom="2dp"
+                android:elevation="2dp"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/start_time"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/start_green"/>
+                        <TextView
 
-                    android:layout_gravity="center"
-                    android:text="开始时间"/>
-                <TextView
-                    android:id="@+id/end_time"
+                            android:id="@+id/start_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="开始时间"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/end_red"/>
+                    <TextView
+                        android:id="@+id/end_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="结束时间"/>
+                </LinearLayout>
 
-                    android:layout_gravity="center"
-                    android:text="结束时间"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/gray"
+                android:layout_height="1dp"></View>
             <LinearLayout
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
                 android:elevation="1dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/start_location"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/start_blue"/>
+                    <TextView
+                        android:id="@+id/start_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
-                    android:layout_gravity="center"
-                    android:text="开始地点"/>
-                <TextView
-                    android:id="@+id/end_location"
+                        android:text="开始地点"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/end_red"/>
+                    <TextView
+                        android:id="@+id/end_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="结束地点"/>
+                </LinearLayout>
 
-                    android:layout_gravity="center"
-                    android:text="结束地点"/>
+
             </LinearLayout>
 
         </LinearLayout>
