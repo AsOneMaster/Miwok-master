@@ -34,11 +34,12 @@
                     android:orientation="horizontal">
                         <ImageView
                             android:layout_gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
                             android:background="@drawable/start_green"/>
                         <TextView
-
+                            android:singleLine="true"
+                            android:layout_gravity="center"
                             android:id="@+id/start_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -50,10 +51,12 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:background="@drawable/end_red"/>
                     <TextView
+                        android:singleLine="true"
+                        android:layout_gravity="center"
                         android:id="@+id/end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -63,8 +66,8 @@
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:background="@color/gray"
-                android:layout_height="1dp"></View>
+                android:background="@color/white_gray"
+                android:layout_height="1.5dp"></View>
             <LinearLayout
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
@@ -78,10 +81,12 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:background="@drawable/start_blue"/>
                     <TextView
+                        android:singleLine="true"
+                        android:layout_gravity="center"
                         android:id="@+id/start_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -94,10 +99,12 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:background="@drawable/end_red"/>
                     <TextView
+                        android:singleLine="true"
+                        android:layout_gravity="center"
                         android:id="@+id/end_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

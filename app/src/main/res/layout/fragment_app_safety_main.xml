@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include android:id="@+id/sheet" layout="@layout/bottom_sheet" />
+    <include layout="@layout/fragment_app_safety" />
+
+    <LinearLayout
+        android:id="@+id/share_loc"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/app_blue_clickable"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="位置分享"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:elevation="5dp"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/white"
+        android:paddingLeft="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:text="当前位置："
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/textView_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/fab"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/sos"
+        android:elevation="6dp"
+        android:text="SOS"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/be_called"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/app_blue_clickable"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="伪装来电"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <com.example.android.learnmiwok.TimingTextView
+        android:id="@+id/Count_down"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:background="@drawable/white_bg"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="170dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="130dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/radius"
+            android:elevation="1dp"
+            android:text="寻求守护"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/end"
+            android:elevation="1dp"
+            android:text="确定到达"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

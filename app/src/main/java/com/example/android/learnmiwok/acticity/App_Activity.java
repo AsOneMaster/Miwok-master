@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 
@@ -21,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -46,6 +49,8 @@ public class App_Activity extends FragmentActivity {
     // private FragmentTransaction transaction;
     private String ip;
     private RadioGroup rgs;
+    private RadioButton[] rb;
+    private Drawable drawables[];
     private List<Fragment> fragments = new ArrayList<Fragment>();
 
 
@@ -57,6 +62,23 @@ public class App_Activity extends FragmentActivity {
         fragments.add(new app_squareFragment());
         fragments.add(new app_mineFragment());
         rgs = (RadioGroup) findViewById(R.id.tab_group);
+        //定义RadioButton数组用来装RadioButton，改变drawableTop大小
+        rb = new RadioButton[3];
+        //将RadioButton装进数组中
+        rb[0] = (RadioButton) findViewById(R.id.image_safety);
+        rb[1] = (RadioButton) findViewById(R.id.image_square);
+        rb[2] = (RadioButton) findViewById(R.id.image_mine);
+        //for循环对每一个RadioButton图片进行缩放
+        for (int i = 0; i < rb.length; i++) {
+            //挨着给每个RadioButton加入drawable限制边距以控制显示大小
+            drawables = rb[i].getCompoundDrawables();
+            //获取drawables，2/5表示图片要缩小的比例
+            Rect r = new Rect(0, 0, drawables[1].getMinimumWidth() * 2 / 5, drawables[1].getMinimumHeight() * 2 / 5);
+            //定义一个Rect边界
+            drawables[1].setBounds(r);
+            //给每一个RadioButton设置图片大小
+            rb[i].setCompoundDrawables(null, drawables[1], null, null);
+        }
         FragmentTabAdapter tabAdapter = new FragmentTabAdapter(this, fragments, R.id.fragment, rgs);
         tabAdapter.setOnRgsExtraCheckedChangedListener(new FragmentTabAdapter.OnRgsExtraCheckedChangedListener() {
             @Override

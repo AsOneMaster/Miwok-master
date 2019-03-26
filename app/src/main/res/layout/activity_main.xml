@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
-            android:background="@drawable/app_bulue_clickable"
+            android:background="@drawable/app_login_button_clickable"
             android:text="普通用户模式"
             android:textColor="#FFFFFF" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/numbers"
             android:layout_marginTop="100dp"
-            android:background="@drawable/app_bulue_clickable"
+            android:background="@drawable/app_login_button_clickable"
             android:text="管理人员用户模式"
             android:textColor="#FFFFFF" />
 

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.learnmiwok.R;
+import com.example.android.learnmiwok.TabIndicatorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,12 @@ public class app_squareFragment extends Fragment {
         //获得控件
     private void initView(View view) {
         my_table = (TabLayout) view.findViewById(R.id.tab);
+        my_table.post(new Runnable() {
+            @Override
+            public void run() {
+                TabIndicatorUtils.setIndicator( my_table,50,50);
+            }
+        });
         viewPager = (ViewPager) view.findViewById(R.id.pager);
     }
         //    写一个适配器

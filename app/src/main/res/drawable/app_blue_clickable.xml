@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/blue_click" android:state_pressed="true"></item>
+    //默认背景要放在后面
+    <item android:drawable="@drawable/blue_radius"></item>
+</selector>

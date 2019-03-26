@@ -10,12 +10,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,14 +23,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.android.learnmiwok.MyApp;
 import com.example.android.learnmiwok.R;
-import com.example.android.learnmiwok.acticity.UsersActivity;
+import com.example.android.learnmiwok.adapter.ListViewDefaultAdapter;
 import com.example.android.learnmiwok.bean.LocationBean;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
-import org.apache.http.Header;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +37,7 @@ public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
      */
     private int topOffset = 155;
     private ListView listView;
-    public  static String msg;
+    public  String msg;
     private List<LocationBean> datas;
     private BottomSheetBehavior<FrameLayout> behavior;
 
@@ -141,7 +135,7 @@ public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
         return behavior;
     }
 
-    private class MyAdapter extends ListViewDefaultAdapter<LocationBean>{
+    private class MyAdapter extends ListViewDefaultAdapter<LocationBean> {
 
         public MyAdapter(List<LocationBean> datas) {
             super(datas);
@@ -167,7 +161,7 @@ public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
             this.s_t.setText("出发时间："+data.getDate().toString());
             this.e_t.setText("到达时间："+data.getEnd_date().toString());
             this.s_loc.setText("出发地点："+(data.getAddr()+data.getLocationDescribe()));
-            this.e_loc.setText("到达地点:"+(data.getEnd_addr()+data.getEnd_locationDescribe()));
+            this.e_loc.setText("到达地点："+(data.getEnd_addr()+data.getEnd_locationDescribe()));
         }
         @Override
         protected View initView() {
@@ -179,14 +173,14 @@ public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
             return view;
         }
     }
-    public boolean isJson(String content) {
-        try {
-            JSONObject.parseObject(content);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+//    public boolean isJson(String content) {
+//        try {
+//            JSONObject.parseObject(content);
+//            return true;
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 
 
 }

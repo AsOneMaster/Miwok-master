@@ -97,6 +97,7 @@
     <color name="fuchsia">#FF00FF</color><!--紫红色 -->
     <color name="magenta">#FF00FF</color><!--红紫色 -->
     <color name="red">#FF0000</color><!--红色 -->
+    <color name="end_red">#B3FF0000</color><!--红色 -->
     <color name="oldlace">#FDF5E6</color><!--老花色 -->
     <color name="lightgoldenrodyellow">#FAFAD2</color><!--亮金黄色 -->
     <color name="linen">#FAF0E6</color><!--亚麻色 -->

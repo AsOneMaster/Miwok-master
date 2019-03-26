@@ -5,7 +5,6 @@ package com.example.android.learnmiwok.fragment;
 import android.annotation.SuppressLint;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,17 +17,15 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.NotificationCompat;
@@ -70,6 +67,7 @@ import com.baidu.mapapi.map.MapView;
 
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.UiSettings;
@@ -104,12 +102,14 @@ import org.json.JSONException;
 
 import com.example.android.learnmiwok.acticity.CalledActivity;
 import com.example.android.learnmiwok.acticity.MyMessageActivity;
-import com.example.android.learnmiwok.acticity.UsersActivity;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -122,7 +122,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     final String CHANNEL_ID = "com.example.android.learnmiwok";
     final String CHANNEL_NAME = "friends_notify";
     public String msg;
-    public static String b_msg;
+    public  String b_msg;
     int MaxTime;
     public static double la,lo;
     private static final String TAG="app_safety_Fragment";
@@ -130,7 +130,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private Spinner spinner;
     private static String[] mArrayString = null;
     //用户id，与好友id；
-    private String UserID=UsersActivity.UserID,OtherID;
+    private String UserID=MyApp.getInstance().getUserip(),OtherID;
     private ArrayAdapter<String> mArrayAdapter;
     //定位相关
     private  static JSONObject send_loc;
@@ -143,6 +143,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private ShareUrlSearch mShareUrlSearch = null;
     private String uri;
     // 定位相关
+    private boolean isfirstNotify;
     Marker marker;
     LatLng latLng=null;
     LocationClient mLocClient;
@@ -165,6 +166,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     public MyLocationListener myListener = new MyLocationListener();
     MessageBroadcastReceiver receiver = new MessageBroadcastReceiver();
     private List<Marker> markers=new ArrayList<Marker>();
+    BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
     /**timer对象**/
     Timer mTimer = null;
 
@@ -192,6 +194,45 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         }
     };
 
+    /**
+     * 导入自定义地图样式
+     * @param context
+     * @param fileName
+     */
+    private void setMapCustomFile(Context context, String fileName) {
+        InputStream inputStream = null;
+        FileOutputStream fileOutputStream = null;
+        String moduleName = null;
+        try {
+            inputStream = context.getAssets().open("mapConfig/" + fileName);
+            byte[] b = new byte[inputStream.available()];
+            inputStream.read(b);
+            moduleName = context.getFilesDir().getAbsolutePath();
+            File file = new File(moduleName + "/" + fileName);
+            if (file.exists()) file.delete();
+            file.createNewFile();
+            fileOutputStream = new FileOutputStream(file);
+            //将自定义样式文件写入本地
+            fileOutputStream.write(b);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+//设置自定义样式文件
+        mMapView.setCustomMapStylePath(moduleName + "/" + fileName);
+    }
+
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
@@ -209,8 +250,10 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         //在使用百度地图SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
         SDKInitializer.initialize(getActivity().getApplicationContext());
+        //自定义地图图层文件
+        setMapCustomFile(getActivity().getApplicationContext(), "custom_map_config.json");
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.activity_safe, container, false);
+        view = inflater.inflate(R.layout.fragment_app_safety_main, container, false);
 
         initView(view);
         initMapView(view);
@@ -301,7 +344,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         textView_s=(TextView)view.findViewById(R.id.textView_s);
         s_loc=(LinearLayout)view.findViewById(R.id.share_loc);
         s_loc.setClickable(true);
-
         be_called=(LinearLayout)view.findViewById(R.id.be_called);
         be_called.setClickable(true);
         img_message=(ImageButton)view.findViewById(R.id.img_message);
@@ -375,6 +417,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     //加载地图
     public void initMapView(View view){
         mMapView =(MapView) view.findViewById(R.id.map_view);
+        mMapView.setMapCustomEnable(true);
         mBaiduMap = mMapView.getMap();
         //隐藏指南针
         mUiSettings = mBaiduMap.getUiSettings();
@@ -395,11 +438,12 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
         option = new LocationClientOption();
         Log.i(TAG, "==-->option:="+option);
+
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//设置定位模式：高精度，低功耗，仅设备
         option.setOpenGps(true);// 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
         option.setScanSpan(1000);//设置每秒更新一次位置信息
-        option.disableCache(false);// 禁止启用缓存定位
+        option.disableCache(true);// 禁止启用缓存定位
         option.setIsNeedLocationDescribe(true);//设置需要位置描述信息
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
@@ -411,10 +455,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         //option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         mLocClient.setLocOption(option);
         mLocClient.start();
-
-
-
-
     }
     /**
      * 上传本地位置给服务器
@@ -430,19 +470,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         httpClient.post(path,entity, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, org.json.JSONObject response) {
-//                if(statusCode==200){
-//                    for(int i=0;i<response.length();i++){
-//                        try {
-//                            if(isStart.equals("no"))
-//                                b_msg=response.getString("show");
-//                                MyApp.getInstance().setMsg(b_msg);
-//                        } catch (JSONException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                        }
               }
            });
 
@@ -491,12 +518,16 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         }
 
         //显示在中心
-        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
-                .newMapStatus(new MapStatus.Builder().target(new LatLng(latitute,longtitute))
-                        .overlook(-15).rotate(360).zoom(12).build());
-        mBaiduMap.setMapStatus(mapStatusUpdate);
-        MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(new LatLng(latitute,longtitute));
-        mBaiduMap.animateMapStatus(u);
+        if(isfirstNotify){
+            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
+                    .newMapStatus(new MapStatus.Builder().target(new LatLng(latitute,longtitute))
+                            .overlook(-15).rotate(360).zoom(13).build());
+            mBaiduMap.setMapStatus(mapStatusUpdate);
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(new LatLng(latitute,longtitute));
+            mBaiduMap.animateMapStatus(u);
+            isfirstNotify=false;
+        }
+
     }
     //将两张图片合并为一张图片 用作头像
     private Bitmap mergeBitmap(Bitmap firstBitmap, Bitmap secondBitmap) {
@@ -571,6 +602,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     .direction(location.getDirection()).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
+//          定位模式、是否开启方向、设置自定义定位图标、精度圈填充颜色以及精度圈边框颜色
+            mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(null,true,null,0x441e90ff,0));
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 //          实时获取地址短串
             shardUrlGPS(latLng);
@@ -583,7 +616,10 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             locationBean_e.setUserId(Integer.parseInt(UserID));
             locationBean_e.setEnd_addr(location.getAddrStr());
             locationBean_e.setEnd_locationDescribe(location.getLocationDescribe());
-
+            if(location.getFloor()!=null){
+                //开启室内定位
+                mLocClient.startIndoorMode();
+            }
             if (isFirstLoc) {
 
                 if(latLng!=null) {
@@ -602,27 +638,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             }
 
             StringBuffer sb = new StringBuffer(256);
-            sb.append("time : ");
-            sb.append(location.getTime());
-            sb.append("\nerror code : ");
-            sb.append(location.getLocType());
-            sb.append("\nlatitude : ");
-            sb.append(location.getLatitude());//获取维度
-            sb.append("\nlontitude : ");
-            sb.append(location.getLongitude());//获取经度
-            sb.append("\nradius : ");
-            sb.append(location.getRadius());//获取定位精度半径，单位是米
-            if (location.getLocType() == BDLocation.TypeGpsLocation){//获取error code
-                sb.append("\nspeed : ");
-                sb.append(location.getSpeed());
-                sb.append("\nsatellite : ");
-                sb.append(location.getSatelliteNumber());
-            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation){
-                sb.append("\naddr : ");
-                sb.append(location.getAddrStr());
-                sb.append("\nlocationDescribe : ");
-                sb.append(location.getLocationDescribe());
-            }
+            sb.append(location.getAddrStr()+location.getLocationDescribe());
 
             textView_s.setText(sb.toString());
 
@@ -737,7 +753,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                                                 e.printStackTrace();
                                             }
                                         }
-                                        BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
                                         bottomSheetDialog.show(getActivity().getSupportFragmentManager(),"dialog");
                                     }
                                 }
@@ -763,7 +778,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         });
         //第二次点击相同
         spinner.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
-            BDLocation location;
             @Override
             public void onChildViewAdded(View parent, View child) {
             }
@@ -784,7 +798,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                                 showMylocation();
                                 break;
                             case 1:
-                                BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
+
                                 bottomSheetDialog.show(getActivity().getSupportFragmentManager(),"dialog");
                                 break;
                             case 2:
@@ -808,7 +822,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private void showMylocation(){
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory
                 .newMapStatus(new MapStatus.Builder().target(latLng)
-                        .overlook(-15).rotate(360).zoom(12).build());
+                        .overlook(-15).rotate(360).zoom(17).build());
         mBaiduMap.setMapStatus(mapStatusUpdate);
         MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
         mBaiduMap.animateMapStatus(u);
@@ -844,11 +858,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 JSONObject object=JSONObject.parseObject(msg);
                 //接受通知
                 if(object.getString("firstSend").equals("yes")){
+                    isfirstNotify=true;
                     notifing(object.getString("situation"));
                 }
 
                 if (object.getString("safe").equals("yes")) {
-                   marker.remove();
+                    isfirstNotify=true;
+                    marker.remove();
                     notifing(object.getString("situation"));
                 }
                 if(object.getString("safe").equals("no")){
@@ -916,12 +932,16 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         }
 
     }
+
+    /**
+     * 时间选择Dialog
+     */
     private void SelecTimeDialog(){
 
         AlertDialog dialog=new AlertDialog.Builder(getActivity()).create();
         dialog.show();
         dialog.setContentView(R.layout.time_dialog);
-
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         MaxTime=0;
 
         ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setIs24HourView(true);
@@ -949,7 +969,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             public void onClick(View v) {
                 //开启线程
                 StartTimer();
-
                 timingTextView.setMaxTime(MaxTime);
                 timingTextView.setVisibility(View.VISIBLE);
                 timingTextView.start();

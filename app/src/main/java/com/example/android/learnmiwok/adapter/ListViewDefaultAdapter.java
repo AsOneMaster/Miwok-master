@@ -1,12 +1,14 @@
-package com.example.android.learnmiwok.fragment;
+package com.example.android.learnmiwok.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.example.android.learnmiwok.fragment.BaseHolder;
+
 import java.util.List;
 
-abstract class ListViewDefaultAdapter<T> extends BaseAdapter {
+public abstract class ListViewDefaultAdapter<T> extends BaseAdapter {
     private List<T> datas;
     public ListViewDefaultAdapter(List<T> datas){
         this.datas=datas;

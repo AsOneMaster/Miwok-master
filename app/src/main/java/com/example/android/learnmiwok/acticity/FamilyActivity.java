@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import com.example.android.learnmiwok.MyApp;
 import com.example.android.learnmiwok.R;
 
 public class FamilyActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class FamilyActivity extends AppCompatActivity {
 //        setTitle("Family");
         Button login= (Button) findViewById(R.id.loginS);
         Button enter= (Button) findViewById(R.id.enterS);
-
+        MyApp.getInstance().setUserip("111");
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

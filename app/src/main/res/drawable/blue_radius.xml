@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="100dp"/>
-    <solid android:color="#B355E6C1"/>
+    /**
+    按钮自定义形状，颜色
+    */
+    <solid android:color="#B31e90ff"/>
     <stroke android:width="5dp" android:color="@color/white"/>
+    <corners android:radius="50dp"/>
 </shape>

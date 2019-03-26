@@ -13,9 +13,9 @@
     android:text="出行时间"
     android:textSize="25sp"
     android:textStyle="bold"
-    android:background="#55E6C1"/>
+    android:background="@drawable/dialog_top"/>
     <TimePicker
-
+        android:background="@color/white"
         android:id="@+id/time_picker"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,6 +24,7 @@
         android:numbersTextColor="@color/white"
         android:timePickerMode="spinner" />
     <LinearLayout
+        android:background="@drawable/dialog_bottom"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal">
@@ -33,7 +34,7 @@
             android:textColor="@color/white"
             android:elevation="1dp"
             android:id="@+id/quit"
-            android:background="#55E6C1"
+            android:background="@color/transperant"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
@@ -47,7 +48,7 @@
             android:text="确定"
             android:elevation="1dp"
             android:id="@+id/select"
-            android:background="#55E6C1"
+            android:background="@color/transperant"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
