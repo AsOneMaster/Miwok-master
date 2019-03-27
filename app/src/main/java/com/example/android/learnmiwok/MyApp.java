@@ -5,6 +5,16 @@ import android.app.Application;
 public class MyApp extends Application {
     private String userip;
     private String msg;
+    private String addr;
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
+
     private Double latitude;
     private Double longitude;
     private String name;

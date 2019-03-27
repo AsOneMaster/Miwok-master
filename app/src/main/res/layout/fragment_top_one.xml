@@ -2,12 +2,13 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:id="@+id/frame">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:background="@color/white_gray"><!-- 此处需设置listView背景 -->
         <ListView
             android:id="@+id/card_listView"
@@ -17,7 +18,63 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
             android:dividerHeight="10dp" /><!-- 一定要将divider设置为@null,dividerHeight控制卡片上下距离 -->
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transperant"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+        <RelativeLayout
+            android:layout_weight="6"
+            android:elevation="5dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/white_bg">
+            <EditText
+                android:id="@+id/input_msg"
+                android:background="@null"
+
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:paddingBottom="5dip"
+                android:paddingTop="5dip"
+                android:textSize="15sp"
+                android:hint="请输入事件信息..."
+                android:layout_marginRight="30dp"/>
+
+            <ImageView
+                android:id="@+id/delete_msg"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/delete_send" />
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/send_msg"
+            android:elevation="5dp"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:gravity="center"
+            android:background="@drawable/white_bg">
+            <ImageView
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:scaleY="0.7"
+                android:scaleX="0.7"
+                android:background="@drawable/send" />
+        </LinearLayout>
 
     </LinearLayout>
-
 </RelativeLayout>

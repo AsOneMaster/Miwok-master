@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/bg_green" android:state_pressed="true"></item>
-    //默认背景要放在后面
-    <item android:drawable="@drawable/bg_bulue"></item>
-</selector>

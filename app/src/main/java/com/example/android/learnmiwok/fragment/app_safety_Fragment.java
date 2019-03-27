@@ -277,7 +277,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                         /**
                          * 如何没有及时到达目的地，自动启动报警
                          */
-                        timingTextView.setTextColor(getResources().getColor(R.color.red));
+                        timingTextView.setTextColor(getResources().getColor(R.color.red,null));
 //                        myListener.sendPhoneNumber("18181766092");
                     };
 
@@ -616,6 +616,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             locationBean_e.setUserId(Integer.parseInt(UserID));
             locationBean_e.setEnd_addr(location.getAddrStr());
             locationBean_e.setEnd_locationDescribe(location.getLocationDescribe());
+            MyApp.getInstance().setAddr(location.getAddrStr()+location.getLocationDescribe());
             if(location.getFloor()!=null){
                 //开启室内定位
                 mLocClient.startIndoorMode();
@@ -857,17 +858,17 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
                 JSONObject object=JSONObject.parseObject(msg);
                 //接受通知
-                if(object.getString("firstSend").equals("yes")){
+                if(object.getString("firstSend")!=null&&object.getString("firstSend").equals("yes")){
                     isfirstNotify=true;
                     notifing(object.getString("situation"));
                 }
 
-                if (object.getString("safe").equals("yes")) {
+                if (object.getString("yes")!=null&&object.getString("safe").equals("yes")) {
                     isfirstNotify=true;
                     marker.remove();
                     notifing(object.getString("situation"));
                 }
-                if(object.getString("safe").equals("no")){
+                if(object.getString("no")!=null&&object.getString("safe").equals("no")){
                     la = object.getDouble("la");
 
                     lo=object.getDouble("lo");
@@ -881,6 +882,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             else {
                 if(msg.equals("好友未上线"))
                 Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+
             }
 
 
@@ -941,9 +943,9 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         AlertDialog dialog=new AlertDialog.Builder(getActivity()).create();
         dialog.show();
         dialog.setContentView(R.layout.time_dialog);
+//      dialog背景透明
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         MaxTime=0;
-
         ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setIs24HourView(true);
         ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setHour(0);
         ((TimePicker) dialog.getWindow().findViewById(R.id.time_picker)).setMinute(0);

@@ -84,9 +84,11 @@
             android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
             android:name=".acticity.UsersActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/category_numbers"
             android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity
+            android:windowSoftInputMode="adjustPan"
             android:name=".acticity.FamilyActivity"
             android:label="@string/category_family"
             android:theme="@style/AppTheme.TranslucentStatus"/>
@@ -99,6 +101,7 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.TranslucentStatus"/>
         <activity android:name=".acticity.App_Activity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.TranslucentStatus"></activity>
         <activity android:name=".acticity.PersonSettingActivity"
             android:theme="@style/AppTheme.TranslucentStatus"/>

@@ -2,6 +2,7 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="1dp"
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15dp"
+        android:paddingBottom="2dp"
         android:paddingRight="15dp"
         android:background="@drawable/card_background_selector"
         android:descendantFocusability="afterDescendants"><!-- 给每个item增加background -->
@@ -27,19 +28,27 @@
                 android:layout_height="36dp"
                 android:background="@drawable/head_img"/>
             <TextView
-                android:id="@+id/line1"
-                android:textColor="#0984e3"
+                android:id="@+id/user_name"
+                android:textColor="@color/event_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:textSize="10sp"
+                android:textSize="13sp"
+                android:layout_gravity="center" />
+            <TextView
+                android:id="@+id/addr"
                 android:layout_gravity="center"
-                android:text="匿名用户"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="8sp"
+                android:text="地址"/>
+
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/event_find"
                 android:textColor="#1e272e"
@@ -47,7 +56,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="46dp"
                 android:text="我发现"
-                android:textSize="9sp"/>
+                android:textSize="10sp"/>
+            <TextView
+                android:id="@+id/send_time"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="46dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="8sp"
+                android:text="时间"/>
         </LinearLayout>
 
     </LinearLayout>

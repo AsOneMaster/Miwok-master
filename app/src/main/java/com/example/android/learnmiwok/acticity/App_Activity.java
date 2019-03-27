@@ -3,6 +3,7 @@ package com.example.android.learnmiwok.acticity;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.widget.AppCompatEditText;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +25,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -38,6 +42,7 @@ import java.util.List;
 
 import com.example.android.learnmiwok.adapter.FragmentTabAdapter;
 
+import com.example.android.learnmiwok.common.SessionManager;
 import com.example.android.learnmiwok.fragment.app_mineFragment;
 import com.example.android.learnmiwok.fragment.app_safety_Fragment;
 import com.example.android.learnmiwok.fragment.app_squareFragment;
@@ -45,8 +50,6 @@ import com.example.android.learnmiwok.fragment.app_squareFragment;
 
 
 public class App_Activity extends FragmentActivity {
-    private FragmentManager manager;
-    // private FragmentTransaction transaction;
     private String ip;
     private RadioGroup rgs;
     private RadioButton[] rb;
@@ -57,6 +60,7 @@ public class App_Activity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_app_);
         fragments.add(new app_safety_Fragment());
         fragments.add(new app_squareFragment());
@@ -92,6 +96,8 @@ public class App_Activity extends FragmentActivity {
 
 
     }
+
+
     /**
      * 获取本地ip地址
      */
@@ -198,6 +204,13 @@ public class App_Activity extends FragmentActivity {
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SessionManager.getInstance().closeSession();
     }
 }
 
