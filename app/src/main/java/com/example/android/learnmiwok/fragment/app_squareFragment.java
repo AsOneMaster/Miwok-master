@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.learnmiwok.R;
-import com.example.android.learnmiwok.TabIndicatorUtils;
+import com.example.android.learnmiwok.Utils.TabIndicatorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +35,8 @@ public class app_squareFragment extends Fragment {
         initView(view);
         return view;
     }
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

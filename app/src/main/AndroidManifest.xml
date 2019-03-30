@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.learnmiwok">
+
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于加快GPS首次定位 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <!-- 白名单对话框权限 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     //一直保持程序在唤醒的状态
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     //手机震动
@@ -11,13 +19,11 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     //拨号权限
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     //获取设备网络状态，禁用后无法获取网络状态
     <uses-permission android:name="android.permission.INTERNET" />
     //网络权限，当禁用后，无法进行检索等相关业务
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     //读取设备硬件信息，统计数据
-
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     //读取系统信息，包含系统版本等信息，用作统计
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -42,9 +48,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".MyApp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -52,14 +58,17 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="BgAaYlKSeLMLNhFdTU6CcOYrM35kw3Si" />
 
-
-        <receiver android:name=".fragment.app_safety_Fragment$NotificationClickReceiver" >
-                        <intent-filter>
-                            <action android:name="com.example.android.learnmiwok" />
-                        </intent-filter>
-                    </receiver> 
-
-        <service android:name="com.example.android.learnmiwok.common.MinaService"></service>
+        <receiver android:name=".fragment.app_safety_Fragment$NotificationClickReceiver">
+                        
+            <intent-filter>
+                                
+                <action android:name="com.example.android.learnmiwok" />
+                            
+            </intent-filter>
+                    
+        </receiver>
+         
+        <service android:name=".common.MinaService" />
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -81,36 +90,39 @@
         <activity
             android:name=".acticity.MyMessageActivity"
             android:label="@string/category_phrases"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
+            android:theme="@style/AppTheme.TranslucentStatus" />
         <activity
             android:name=".acticity.UsersActivity"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/category_numbers"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
+            android:theme="@style/AppTheme.TranslucentStatus"
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:windowSoftInputMode="adjustPan"
             android:name=".acticity.FamilyActivity"
             android:label="@string/category_family"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
+            android:theme="@style/AppTheme.TranslucentStatus"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".acticity.CalledActivity"
             android:label="@string/category_colors"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
+            android:theme="@style/AppTheme.TranslucentStatus" />
         <activity
             android:name=".acticity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
-        <activity android:name=".acticity.App_Activity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.TranslucentStatus"></activity>
-        <activity android:name=".acticity.PersonSettingActivity"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
-        <activity android:name=".acticity.ContactSettingActivity"
-            android:theme="@style/AppTheme.TranslucentStatus"/>
+            android:theme="@style/AppTheme.TranslucentStatus" />
+        <activity
+            android:name=".acticity.App_Activity"
+            android:theme="@style/AppTheme.TranslucentStatus"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".acticity.PersonSettingActivity"
+            android:theme="@style/AppTheme.TranslucentStatus" />
+        <activity
+            android:name=".acticity.ContactSettingActivity"
+            android:theme="@style/AppTheme.TranslucentStatus" />
         <activity
             android:name=".acticity.SosActivity"
             android:label="@string/title_activity_sos"
-            android:theme="@style/AppTheme.TranslucentStatus"></activity>
+            android:theme="@style/AppTheme.TranslucentStatus" />
     </application>
 
 </manifest>

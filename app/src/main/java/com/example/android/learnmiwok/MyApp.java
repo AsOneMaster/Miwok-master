@@ -7,6 +7,15 @@ public class MyApp extends Application {
     private String msg;
     private String addr;
 
+    public String getOtheraddr() {
+        return otheraddr;
+    }
+
+    public void setOtheraddr(String otheraddr) {
+        this.otheraddr = otheraddr;
+    }
+
+    private String otheraddr;
     public String getAddr() {
         return addr;
     }

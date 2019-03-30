@@ -10,31 +10,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 
-import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.android.learnmiwok.EditTextUtils;
+import com.example.android.learnmiwok.Utils.EditTextUtils;
 import com.example.android.learnmiwok.MyApp;
 import com.example.android.learnmiwok.R;
-import com.example.android.learnmiwok.acticity.App_Activity;
 import com.example.android.learnmiwok.adapter.ListViewDefaultAdapter;
-import com.example.android.learnmiwok.bean.LocationBean;
 import com.example.android.learnmiwok.common.ConnectionManager;
 import com.example.android.learnmiwok.common.SessionManager;
 
@@ -43,6 +36,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import cn.refactor.lib.colordialog.ColorDialog;
+import cn.refactor.lib.colordialog.PromptDialog;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -91,16 +87,28 @@ public class TopOneFragment extends Fragment {
         send_msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JSONObject lObject = new JSONObject();
-                    lObject.put("Userid",MyApp.getInstance().getUserip());
-                    lObject.put("client","event");
-                    msg=input_msg.getText().toString();
-                    input_msg.setText("");
-                    data.add(msg);
-                    lObject.put("eventMsg",msg);
-                    is_me=true;
-                    SessionManager.getInstance().writeToServer(lObject.toString());
-                    hideSoftInputFromWindow();
+                    new PromptDialog(getActivity())
+                            .setDialogType(PromptDialog.DIALOG_TYPE_WARNING)
+                            .setAnimationEnable(true)
+                            .setTitleText("WARNING")
+                            .setContentText("请确保您所上报的事件信息的真实性，上传虚假信息您将承受法律后果！")
+                            .setPositiveListener("我确定", new PromptDialog.OnPositiveListener() {
+                                @Override
+                                public void onClick(PromptDialog dialog) {
+                                    JSONObject lObject = new JSONObject();
+                                    lObject.put("Userid",MyApp.getInstance().getUserip());
+                                    lObject.put("client","event");
+                                    msg=input_msg.getText().toString();
+                                    input_msg.setText("");
+                                    data.add(msg);
+                                    lObject.put("eventMsg",msg);
+                                    is_me=true;
+                                    SessionManager.getInstance().writeToServer(lObject.toString());
+                                    hideSoftInputFromWindow();
+                                    dialog.dismiss();
+                                }
+                            }).show();
+
                 }
             });
 

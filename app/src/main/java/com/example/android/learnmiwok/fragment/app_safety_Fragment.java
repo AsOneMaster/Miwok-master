@@ -60,6 +60,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -69,7 +70,9 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 
@@ -114,6 +117,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.refactor.lib.colordialog.PromptDialog;
 
 
 public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResultListener,View.OnTouchListener {
@@ -143,8 +147,19 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     private ShareUrlSearch mShareUrlSearch = null;
     private String uri;
     // 定位相关
+    //  路线覆盖物
+
+    public Overlay polylineOverlay = null;
     private boolean isfirstNotify;
+    /**
+     * 地图覆盖物
+     */
     Marker marker;
+    Marker markerRoute;
+    private List<Marker> markers=new ArrayList<Marker>();
+    /**
+     * 定位
+     */
     LatLng latLng=null;
     LocationClient mLocClient;
     boolean isFirstLoc = true;// 是否首次定位
@@ -165,7 +180,13 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
     public MyLocationListener myListener = new MyLocationListener();
     MessageBroadcastReceiver receiver = new MessageBroadcastReceiver();
-    private List<Marker> markers=new ArrayList<Marker>();
+
+    BitmapDescriptor bmpStart= null;
+    BitmapDescriptor bmpEnd=null;
+    /**
+     * 轨迹点集合
+     */
+    private List<LatLng> trackPoints = new ArrayList<LatLng>();
     BaseFullBottomSheetFragment bottomSheetDialog = new BaseFullBottomSheetFragment();
     /**timer对象**/
     Timer mTimer = null;
@@ -296,7 +317,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         if(mTimerTask!= null){
             mTimerTask = null;
         }
-        timingTextView.setTextColor(getResources().getColor(R.color.black));
+        timingTextView.setTextColor(getResources().getColor(R.color.black,null));
         handler.sendEmptyMessage(1);
     }
 
@@ -431,6 +452,37 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         mSearch.setOnGetGeoCodeResultListener(this);
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
+        /**
+         * Marker点击事件
+         */
+        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+                                               @Override
+                                               public boolean onMarkerClick(final Marker markerer) {
+                                                   Bundle bundle = markerer.getExtraInfo();
+                                                   View view = View.inflate(getActivity(), R.layout.map_info, null);
+                                                   TextView showAddr = view.findViewById(R.id.map_tv_showAddr);
+                                                   showAddr.setText(bundle.getString("start"));
+                                                   TextView delete= view.findViewById(R.id.map_tv_delete);
+                                                   TextView kance = view.findViewById(R.id.map_tv_kance);
+                                                   final InfoWindow mInfoWindow = new InfoWindow(view, markerer.getPosition(), -bundle.getInt("height"));
+                                                   mBaiduMap.showInfoWindow(mInfoWindow);
+                                                   delete.setOnClickListener(new View.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(View v) {
+                                                           mBaiduMap.clear();
+                                                           mBaiduMap.hideInfoWindow();
+                                                       }
+                                                   });
+                                                   kance.setOnClickListener(new View.OnClickListener() {
+                                                       @Override
+                                                       public void onClick(View v) {
+                                                           //关闭InfoWindow
+                                                           mBaiduMap.hideInfoWindow();
+                                                       }
+                                                   });
+                                                   return true;
+                                               }
+                                           });
 
         // 定位初始化
         mLocClient = new LocationClient(getActivity().getApplicationContext());
@@ -484,12 +536,66 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         Resources r = this.getResources();
         Bitmap bmp= BitmapFactory.decodeResource(r, R.drawable.head_img);
         addOthersLocation(la ,lo,bmp);
+        trackPoints.add(new LatLng(la,lo));
+        if(trackPoints.size()>2){
+            addRoute(trackPoints);
+        }
         Log.e("SOO",la+""+lo);
+    }
+    /**
+     * 添加他人路线
+     */
+    private void addRoute(List<LatLng> points){
+
+        if (null != polylineOverlay) {
+            polylineOverlay.remove();
+            polylineOverlay = null;
+        }
+        if(markerRoute!=null){
+            markerRoute.remove();
+        }
+        Log.e("TAG",points.toString());
+        OverlayOptions polylineOptions = new PolylineOptions().width(10)
+                .color(Color.BLUE).points(points);
+        // 添加起点图标
+        bmpStart=BitmapDescriptorFactory.fromResource(R.mipmap.icon_start);
+
+        OverlayOptions startOptions = new MarkerOptions()
+                .position(points.get(0)).icon(bmpStart)
+                .zIndex(9).draggable(false);
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(points.get(0)));
+        markerRoute=(Marker)mBaiduMap.addOverlay(startOptions);
+        // 设置额外的信息
+        Bundle bundle = new Bundle();
+        bundle.putString("start", MyApp.getInstance().getOtheraddr());
+        bundle.putInt("height", bmpStart.getBitmap().getHeight());
+        markerRoute.setExtraInfo(bundle);
+
+        polylineOverlay=mBaiduMap.addOverlay(polylineOptions);
+    }
+    /**
+     * 添加终点
+     */
+    public void drawEnd(){
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(trackPoints.get(trackPoints.size()-1)));
+        bmpEnd=BitmapDescriptorFactory.fromResource(R.mipmap.icon_end);
+
+        OverlayOptions endOptions = new MarkerOptions()
+                .position(trackPoints.get(trackPoints.size()-1)).icon(bmpEnd)
+                .zIndex(9).draggable(false);
+        markerRoute=(Marker)mBaiduMap.addOverlay(endOptions);
+        // 设置额外的信息
+        Bundle bundle = new Bundle();
+        bundle.putString("start", MyApp.getInstance().getOtheraddr());
+        bundle.putInt("height",  bmpEnd.getBitmap().getHeight());
+        markerRoute.setExtraInfo(bundle);
     }
     /**
      * 添加他人位置
      */
     public void addOthersLocation(double latitute,double longtitute, Bitmap touxiang) {
+
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(new LatLng(latitute,longtitute)));
 
         Resources r = this.getResources();
 
@@ -512,6 +618,11 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                marker.remove();
             }
             marker=(Marker) mBaiduMap.addOverlay(option);
+            // 设置额外的信息
+            Bundle bundle = new Bundle();
+            bundle.putString("start", MyApp.getInstance().getOtheraddr());
+            bundle.putInt("height",  othersCurrentMarker .getBitmap().getHeight());
+            marker.setExtraInfo(bundle);
             markers.add(marker);
         }catch (Exception e){
             e.printStackTrace();
@@ -603,7 +714,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                     .longitude(location.getLongitude()).build();
             mBaiduMap.setMyLocationData(locData);
 //          定位模式、是否开启方向、设置自定义定位图标、精度圈填充颜色以及精度圈边框颜色
-            mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(null,true,null,0x441e90ff,0));
+            mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(null,true,null,0x331e90ff,0));
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
 //          实时获取地址短串
             shardUrlGPS(latLng);
@@ -643,6 +754,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
             textView_s.setText(sb.toString());
 
+
         }
 
         public void onReceivePoi(BDLocation poiLocation) {
@@ -671,7 +783,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                             myListener.sendPhoneNumber("18181766092");
                         }
                     });
-                    Log.d("URI2:",arg0.getUrl().toString());
+
                 }
                 @Override
                 public void onGetPoiDetailShareUrlResult(ShareUrlResult arg0) {
@@ -835,7 +947,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-
+            MyApp.getInstance().setOtheraddr(result.getAddress());
     }
     public void registerBroadcast(){
         IntentFilter filter = new IntentFilter(ConnectionManager.BROADCAST_ACTION);
@@ -860,15 +972,31 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                 //接受通知
                 if(object.getString("firstSend")!=null&&object.getString("firstSend").equals("yes")){
                     isfirstNotify=true;
+
                     notifing(object.getString("situation"));
                 }
 
-                if (object.getString("yes")!=null&&object.getString("safe").equals("yes")) {
+                if (object.getString("safe")!=null&&object.getString("safe").equals("yes")) {
                     isfirstNotify=true;
                     marker.remove();
+                    markerRoute.remove();
+//                  显示终点图标
+                    drawEnd();
                     notifing(object.getString("situation"));
+                    new PromptDialog(getActivity())
+                            .setDialogType(PromptDialog.DIALOG_TYPE_SUCCESS)
+                            .setAnimationEnable(true)
+                            .setTitleText("SAFE")
+                            .setContentText("你的好友已经安全到达目的地。")
+                            .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                @Override
+                                public void onClick(PromptDialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
+
                 }
-                if(object.getString("no")!=null&&object.getString("safe").equals("no")){
+                if(object.getString("safe")!=null&&object.getString("safe").equals("no")){
                     la = object.getDouble("la");
 
                     lo=object.getDouble("lo");

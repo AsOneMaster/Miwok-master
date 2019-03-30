@@ -1,8 +1,7 @@
-package com.example.android.learnmiwok;
+package com.example.android.learnmiwok.Utils;
 
 
 import android.content.res.Resources;
-import android.graphics.Paint;
 import android.support.design.widget.TabLayout;
 import android.util.TypedValue;
 import android.view.View;

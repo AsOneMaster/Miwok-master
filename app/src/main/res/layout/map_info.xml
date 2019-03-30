@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_gravity="center"
+    android:layout_width="340dp"
+    android:elevation="5dp"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:background="@color/transperant"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center">
+    <TextView
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        android:text="此处位置"/>
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/map_tv_showAddr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/map_tv_delete"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="清空"
+            android:gravity="center"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/map_tv_kance"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:text="隐藏"
+            android:gravity="center"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>
+</RelativeLayout>

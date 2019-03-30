@@ -3,6 +3,7 @@ package com.example.android.learnmiwok.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -54,8 +56,12 @@ public class TopTwoFragment extends Fragment {
 
 
         showView.setWebViewClient(new WebViewClient() {
-                                      public boolean shouldOverrideUrlLoading(WebView view, String url) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
-                                          view.loadUrl(url);
+                                      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) { //  重写此方法表明点击网页里面的链接还是在当前的webview里跳转，不跳到浏览器那边
+                                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                              view.loadUrl(request.getUrl().toString());
+                                          } else {
+                                              view.loadUrl(request.toString());
+                                          }
                                           return false;
                                       }});
         showView.setOnKeyListener(new View.OnKeyListener() {

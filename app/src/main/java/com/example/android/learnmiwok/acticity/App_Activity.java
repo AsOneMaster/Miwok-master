@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.FragmentActivity;
@@ -205,6 +208,26 @@ public class App_Activity extends FragmentActivity {
             startActivity(intent);
         }
     }
+
+//    @Override
+//    protected void onResume() {
+//        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        super.onResume();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            String packageName = getPackageName();
+//            boolean isIgnoring = pm.isIgnoringBatteryOptimizations(packageName);
+//            if (!isIgnoring) {
+//                Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+//                intent.setData(Uri.parse("package:" + packageName));
+//                try {
+//                    startActivity(intent);
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//        }
+//
+//    }
 
     @Override
     protected void onDestroy() {

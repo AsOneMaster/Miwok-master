@@ -113,7 +113,7 @@ public class CalledActivity extends AppCompatActivity {
     public static void PlayRingTone(Context ctx,int type) {
 
         vibrator = (Vibrator)ctx.getSystemService(ctx.VIBRATOR_SERVICE);
-// 等待3秒，震动3秒，从第0个索引开始，一直循环
+    // 等待3秒，震动3秒，从第0个索引开始，一直循环
         vibrator.vibrate(new long[]{500, 3000}, 0);
 
         mMediaPlayer = MediaPlayer.create(ctx,
