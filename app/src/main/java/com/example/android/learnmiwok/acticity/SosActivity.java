@@ -70,7 +70,7 @@ public class SosActivity extends Activity {
     private MediaPlayer mMediaPlayer=new MediaPlayer();
     private AutoFitTextureView textureView;
     // 摄像头ID（通常0代表后置摄像头，1代表前置摄像头）
-    private String mCameraId = "0";
+    private String mCameraId = "1";
     // 定义代表摄像头的成员变量
     private CameraDevice cameraDevice;
     // 预览尺寸

@@ -51,8 +51,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
@@ -76,6 +78,8 @@ import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 
+
+import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
@@ -120,7 +124,7 @@ import java.util.TimerTask;
 import cn.refactor.lib.colordialog.PromptDialog;
 
 
-public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResultListener,View.OnTouchListener {
+public class app_safety_Fragment extends Fragment implements View.OnTouchListener {
 
     /**广播通知,渠道ID*/
     final String CHANNEL_ID = "com.example.android.learnmiwok";
@@ -274,8 +278,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         //自定义地图图层文件
         setMapCustomFile(getActivity().getApplicationContext(), "custom_map_config.json");
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_app_safety_main, container, false);
-
+         view = inflater.inflate(R.layout.fragment_app_safety_main, container, false);
+//          实时获取地址短串
         initView(view);
         initMapView(view);
         sinnerStart();
@@ -398,6 +402,17 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
             }
         });
+        s_loc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mShareUrlSearch.requestLocationShareUrl(new LocationShareURLOption()
+                        .location(latLng).name("你好友分享的位置").snippet("SOS"));
+                Log.d("位置分享短串",new LocationShareURLOption()
+                        .location(latLng).name("你好友分享的位置").snippet("SOS").toString());
+                sendPhoneNumber("18181766092");
+            }
+        });
         //开启上传位置线程
         s.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -440,6 +455,39 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         mMapView =(MapView) view.findViewById(R.id.map_view);
         mMapView.setMapCustomEnable(true);
         mBaiduMap = mMapView.getMap();
+
+        mShareUrlSearch=ShareUrlSearch.newInstance();
+
+        OnGetShareUrlResultListener shareUrlResultListener = new OnGetShareUrlResultListener() {
+
+            @Override
+            public void onGetPoiDetailShareUrlResult(ShareUrlResult shareUrlResult) {
+                if (shareUrlResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                    Toast.makeText(getActivity(), "抱歉，未搜索到短串",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "poi详情分享url：" + shareUrlResult.getUrl(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onGetLocationShareUrlResult(ShareUrlResult shareUrlResult) {
+                if (shareUrlResult.error != SearchResult.ERRORNO.NO_ERROR) {
+                    Toast.makeText(getActivity(), "未搜索到短串,短信已发送",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(),  "请求位置信息分享url：" + shareUrlResult.getUrl(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onGetRouteShareUrlResult(ShareUrlResult shareUrlResult) {
+
+            }
+        };
+        mShareUrlSearch.setOnGetShareUrlResultListener(shareUrlResultListener);
         //隐藏指南针
         mUiSettings = mBaiduMap.getUiSettings();
         mUiSettings.setCompassEnabled(true);
@@ -449,7 +497,6 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         mMapView.removeViewAt(1);
         // 初始化搜索模块，注册事件监听
         mSearch = GeoCoder.newInstance();
-        mSearch.setOnGetGeoCodeResultListener(this);
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         /**
@@ -494,17 +541,18 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//设置定位模式：高精度，低功耗，仅设备
         option.setOpenGps(true);// 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(1000);//设置每秒更新一次位置信息
+       // option.setScanSpan(1000);//设置每秒更新一次位置信息
         option.disableCache(true);// 禁止启用缓存定位
         option.setIsNeedLocationDescribe(true);//设置需要位置描述信息
         option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
         option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+
         option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
         option.setIgnoreKillProcess(true);//可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         option.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
-        //option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
+        option.setOpenAutoNotifyMode(); //设置打开自动回调位置模式，该开关打开后，期间只要定位SDK检测到位置变化就会主动回调给开发者，该模式下开发者无需再关心定位间隔是多少，定位SDK本身发现位置变化就会及时回调给开发者
         mLocClient.setLocOption(option);
         mLocClient.start();
     }
@@ -546,7 +594,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
      * 添加他人路线
      */
     private void addRoute(List<LatLng> points){
-
+        latlngToAddress(points.get(0));
         if (null != polylineOverlay) {
             polylineOverlay.remove();
             polylineOverlay = null;
@@ -577,7 +625,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
      * 添加终点
      */
     public void drawEnd(){
-        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(trackPoints.get(trackPoints.size()-1)));
+        latlngToAddress(trackPoints.get(trackPoints.size()-1));
+
         bmpEnd=BitmapDescriptorFactory.fromResource(R.mipmap.icon_end);
 
         OverlayOptions endOptions = new MarkerOptions()
@@ -694,6 +743,8 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
     }
 
 
+
+
     /**
      * 定位SDK监听函数
      */
@@ -705,19 +756,18 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
             if (location == null || mMapView == null)
                 return;
             //                        // 反Geo搜索
-            mSearch.reverseGeoCode(new ReverseGeoCodeOption()
-                    .location(mBaiduMap.getMapStatus().target));
+//            mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+//                    .location(mBaiduMap.getMapStatus().target));
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
                     // 此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(location.getDirection()).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
+
             mBaiduMap.setMyLocationData(locData);
 //          定位模式、是否开启方向、设置自定义定位图标、精度圈填充颜色以及精度圈边框颜色
             mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(null,true,null,0x331e90ff,0));
             latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//          实时获取地址短串
-            shardUrlGPS(latLng);
 //          获取本地位置信息
             locationBean.setDate(location.getTime());
             locationBean.setUserId(Integer.parseInt(UserID));
@@ -759,52 +809,19 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
 
         public void onReceivePoi(BDLocation poiLocation) {
         }
-        /**
-         * 位置分享短串
-         * @param l
-         */
-        public void shardUrlGPS(LatLng l){
 
-            mShareUrlSearch = ShareUrlSearch.newInstance();
-            OnGetShareUrlResultListener listener = new OnGetShareUrlResultListener() {
-
-                @Override
-                public void onGetRouteShareUrlResult(ShareUrlResult arg0) {
-                    Log.d("URI1:",arg0.getUrl().toString());
-                }
-                @Override
-                public void onGetLocationShareUrlResult(ShareUrlResult arg0) {
-                    uri=arg0.getUrl();
-                    s_loc.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getActivity(),"求助短信已发送",Toast.LENGTH_SHORT).show();
-
-                            myListener.sendPhoneNumber("18181766092");
-                        }
-                    });
-
-                }
-                @Override
-                public void onGetPoiDetailShareUrlResult(ShareUrlResult arg0) {
-                    Log.d("URI3:",arg0.getUrl().toString());
-                }
-            };
-
-            mShareUrlSearch.setOnGetShareUrlResultListener(listener);
-            mShareUrlSearch.requestLocationShareUrl(new LocationShareURLOption()
-                    .location(l).name("你好友分享的位置").snippet("SOS"));
-            Log.d("位置分享短串",new LocationShareURLOption()
-                    .location(l).name("你好友分享的位置").snippet("SOS").toString());
-
-        }
-        //一键发送短信
-        private void sendPhoneNumber(String phoneNumber){
-            SmsManager smsManager=SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber,null,"【\bCare\byou\b】您好，您的学生通过Care\byou向您发起了求助，最后地点在"+uri.toString(),null,null);
-        }
     }
+    /**
+     * 位置分享短串
+     *
+     */
 
+
+    //一键发送短信
+    private void sendPhoneNumber(String phoneNumber){
+        SmsManager smsManager=SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumber,null,"【\bCare\byou\b】您好，您的学生通过Care\byou向您发起了求助，最后地点在:"+textView_s.getText(),null,null);
+    }
 
         /**
          * 加载下拉框
@@ -940,14 +957,38 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
         MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(latLng);
         mBaiduMap.animateMapStatus(u);
     }
-    @Override
-    public void onGetGeoCodeResult(GeoCodeResult result) {
 
-    }
+    private void latlngToAddress(LatLng latlng) {
 
-    @Override
-    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-            MyApp.getInstance().setOtheraddr(result.getAddress());
+        // 设置反地理经纬度坐标,请求位置时,需要一个经纬度
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(latlng));
+
+
+        //设置地址或经纬度反编译后的监听,这里有两个回调方法,
+
+        mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+
+            //经纬度转换成地址
+
+            @Override
+            public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+                if (result == null ||  result.error != SearchResult.ERRORNO.NO_ERROR) {
+                    Toast.makeText(getActivity(), "找不到该地址!",Toast.LENGTH_SHORT).show();
+                }
+                MyApp.getInstance().setOtheraddr(result.getAddress());
+            }
+
+
+
+
+            @Override
+            public void onGetGeoCodeResult(GeoCodeResult result) {
+                // 详细地址转换在经纬度
+
+                String address=result.getAddress();
+
+            }
+        });
     }
     public void registerBroadcast(){
         IntentFilter filter = new IntentFilter(ConnectionManager.BROADCAST_ACTION);
@@ -987,7 +1028,7 @@ public class app_safety_Fragment extends Fragment implements OnGetGeoCoderResult
                             .setDialogType(PromptDialog.DIALOG_TYPE_SUCCESS)
                             .setAnimationEnable(true)
                             .setTitleText("SAFE")
-                            .setContentText("你的好友已经安全到达目的地。")
+                            .setContentText("你的好友安全到达目的地。")
                             .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
                                 @Override
                                 public void onClick(PromptDialog dialog) {
