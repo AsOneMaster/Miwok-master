@@ -14,6 +14,8 @@
      limitations under the License.
 -->
 <resources>
+    <color name="bluejeff">#0861B1</color>
+
     <!-- Primary color of the app (shown in the app bar) -->
     <color name="primary_color">#4A312A</color>
 

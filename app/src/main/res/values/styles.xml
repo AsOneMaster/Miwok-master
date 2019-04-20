@@ -20,6 +20,7 @@
 
     <!-- Style for a category of vocabulary words -->
     <style name="CategoryStyle">
+
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/list_item_height</item>
         <item name="android:gravity">center_vertical</item>
@@ -35,7 +36,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:button">@null</item>
-        <item name="android:drawablePadding">0dp</item>
+        <item name="android:drawablePadding">5dp</item>
     </style>
 
     <style name="menu_TabText">
@@ -89,5 +90,15 @@
         <item name="behavior_hideable">true</item>
         <item name="behavior_skipCollapsed">false</item>
     </style>
-
+    <style name="txt_topbar">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:shadowColor">#40000000</item>
+        <item name="android:shadowDy">-2.0</item>
+        <item name="android:shadowRadius">4.0</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
 </resources>

@@ -6,4 +6,131 @@
     android:layout_height="match_parent"
     tools:context=".acticity.ContactSettingActivity">
     <include layout="@layout/title_back"></include>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@drawable/bg_black">
+            <ImageView
+                android:id="@+id/img_user_list_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="24dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/btn_return"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/txt_topbar"
+                android:text="联系人列表"/>
+            <ImageView
+                android:id="@+id/img_user_list_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="24dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/user_list_group" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_bar"
+            android:gravity="center_horizontal"/>
+
+        <com.example.android.learnmiwok.views.SearchEditText
+            android:id="@+id/txt_filter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:paddingRight="50dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/bg_query"
+            android:hint="请输入关键字"
+            android:paddingLeft="45dp"
+            android:textAlignment="center"
+            android:textSize="15.0dip" />
+
+        <!-- contact user list -->
+        <Button
+            android:id="@+id/search_people"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/bg_green"
+            android:text="查看紧急联系人"
+            android:textColor="@color/white" />
+        <Button
+            android:id="@+id/update_people"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="12dp"
+            android:background="@drawable/bg_red"
+            android:text="添加紧急联系人"
+            android:textColor="@color/white" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+            <ListView
+                android:id="@+id/list_view_user_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="top"
+                android:background="@color/white">
+            </ListView>
+
+            <TextView
+                android:id="@+id/txt_dialog"
+                android:layout_width="80.0dip"
+                android:layout_height="80.0dip"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_photo_default_mask3_1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="30.0dip"
+                android:visibility="invisible"/>
+
+            <com.example.android.learnmiwok.views.SideBar
+                android:id="@+id/sild_bar"
+                android:layout_width="30.0dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center|right"/>
+            <TextView
+                android:id="@+id/txt_user_list_user_num"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+
+                android:paddingBottom="5dp"
+                android:text="123"
+                android:background="@color/white"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                />
+        </FrameLayout>
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

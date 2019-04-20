@@ -30,6 +30,8 @@ import com.example.android.learnmiwok.bean.LocationBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.baidu.mapapi.BMapManager.getContext;
+
 public class BaseFullBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String path="http://192.168.43.162:8080/Te/location";
     /**

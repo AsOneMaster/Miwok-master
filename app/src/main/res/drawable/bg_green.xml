@@ -3,6 +3,6 @@
     /**
     按钮自定义形状，颜色
     */
-    <solid android:color="@color/springgreen"/>
+    <solid android:color="#55E6C1"/>
     <corners android:radius="100dp"/>
 </shape>
